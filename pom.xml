@@ -13,6 +13,9 @@
         <module>service_invoice</module>
         <module>service_policy</module>
         <module>service_account</module>
+        <module>common</module>
+        <module>common_log</module>
+        <module>common_message</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -20,6 +23,7 @@
         <java.version>17</java.version>
         <spring-boot.version>2.7.13</spring-boot.version>
         <spring-cloud.version>2021.0.8</spring-cloud.version>
+        <lombok.version>1.18.24</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -41,6 +45,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- lombok -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
