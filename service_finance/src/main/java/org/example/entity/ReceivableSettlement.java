@@ -12,6 +12,9 @@ import java.math.BigDecimal;
 public class ReceivableSettlement extends CommonEntity {
     // 状态
     private Long status;
+    // 创建场景
+    private Long createdScene;
+    // 应收类型
     private Long type;
     // 保单类型
     private Long policyType;
@@ -69,8 +72,6 @@ public class ReceivableSettlement extends CommonEntity {
     private String interfaceFieldId;
     // 分项保费名称
     private String interfaceFieldName;
-
-    private Long createdScene;
     // 最终结算金额
     private Long includeTaxSettleMoney;
 
