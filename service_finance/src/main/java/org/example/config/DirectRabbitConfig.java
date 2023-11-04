@@ -1,13 +1,17 @@
-package org.example.entity.config;
+package org.example.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
+@Component
 public class DirectRabbitConfig {
     /**
      * 队列 起名：TestDirectQueue
@@ -47,5 +51,6 @@ public class DirectRabbitConfig {
     DirectExchange lonelyDirectExchange() {
         return new DirectExchange("lonelyDirectExchange");
     }
+
 
 }
