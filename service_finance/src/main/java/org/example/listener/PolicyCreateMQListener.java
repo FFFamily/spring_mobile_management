@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 @Slf4j
 @Component
-@RabbitListener(queues = "TestDirectQueue")//监听的队列名称 TestDirectQueue
+@RabbitListener(queues = "policy_create")//监听的队列名称 TestDirectQueue
 public class PolicyCreateMQListener {
 
     @RabbitHandler

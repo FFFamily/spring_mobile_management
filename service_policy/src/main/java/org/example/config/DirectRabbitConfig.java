@@ -4,11 +4,9 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @Component
@@ -25,11 +23,11 @@ public class DirectRabbitConfig {
         // autoDelete:是否自动删除，当没有生产者或者消费者使用此队列，该队列会自动删除。
         //   return new Queue("TestDirectQueue",true,true,false);
         //一般设置一下队列的持久化就好,其余两个就是默认false
-        return new Queue("TestDirectQueue", false);
+        return new Queue("policy_create", false);
     }
 
     /**
-     * Direct交换机 起名：TestDirectExchange
+     * Direct交换机 起名：RootDirectExchange
      */
     @Bean
     DirectExchange TestDirectExchange() {
@@ -37,7 +35,7 @@ public class DirectRabbitConfig {
     }
 
     /**
-     * 绑定  将队列和交换机绑定, 并设置用于匹配键：TestDirectRouting
+     * 绑定  将队列和交换机绑定, 并设置用于匹配键：RootDirectRouting
      *
      * @return
      */

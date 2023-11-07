@@ -14,10 +14,16 @@ public class CommonResponse<T> {
      * @return
      * @param <T>
      */
-    public static <T> CommonResponse success(T data){
+    public static <T> CommonResponse<T> success(T data){
         CommonResponse<T> response = new CommonResponse<>();
         response.setCode(SUCCESS_CODE);
         response.setData(data);
+        return response;
+    }
+
+    public static <T> CommonResponse<T> success(){
+        CommonResponse<T> response = new CommonResponse<>();
+        response.setCode(SUCCESS_CODE);
         return response;
     }
 }
