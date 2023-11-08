@@ -25,7 +25,7 @@ public class DirectRabbitConfig {
         // autoDelete:是否自动删除，当没有生产者或者消费者使用此队列，该队列会自动删除。
         //   return new Queue("TestDirectQueue",true,true,false);
         //一般设置一下队列的持久化就好,其余两个就是默认false
-        return new Queue("TestDirectQueue", false);
+        return new Queue("policy_create", false);
     }
 
     /**

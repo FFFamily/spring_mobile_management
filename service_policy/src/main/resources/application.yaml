@@ -6,7 +6,11 @@ spring:
     username: root
     password:
     url: jdbc:mysql://127.0.0.1:3306/policy
-
+  rabbitmq:
+    password: guest
+    username: guest
+    port: 5672
+    addresses: 127.0.0.1
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl

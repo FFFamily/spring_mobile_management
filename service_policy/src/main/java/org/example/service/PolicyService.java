@@ -19,7 +19,7 @@ public class PolicyService {
 
     /**
      * 创建 Policy
-     * @param request
+     * @param policy
      */
     public void createPolicy(Policy policy){
         Policy oldPolicy = policyMapper.selectOne(new LambdaQueryWrapper<Policy>()

@@ -1,4 +1,9 @@
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password:
+    url: jdbc:mysql://127.0.0.1:3306/finance
   # rabbitmq消息队列配置
   rabbitmq:
     password: guest
@@ -25,3 +30,9 @@ spring:
     #支持消息的确认与返回
     template:
       mandatory: true
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
