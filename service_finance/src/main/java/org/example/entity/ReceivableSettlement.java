@@ -1,9 +1,7 @@
 package org.example.entity;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.CommonEntity;
 
 import java.math.BigDecimal;
 

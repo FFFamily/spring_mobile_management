@@ -1,8 +1,9 @@
 package org.example.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.core.Policy;
 import org.example.entity.CommonResponse;
-import org.example.entity.Policy;
+
 import org.example.service.PolicyService;
 import org.example.vo.PolicyCreateRequest;
 import org.springframework.web.bind.annotation.PostMapping;

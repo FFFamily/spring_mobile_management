@@ -1,10 +1,8 @@
-package org.example.entity;
+package org.example.core;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import org.example.CommonEntity;
+import org.example.entity.CommonEntity;
 
 
 @EqualsAndHashCode(callSuper = false)
