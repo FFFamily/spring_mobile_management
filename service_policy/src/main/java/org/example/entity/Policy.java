@@ -12,4 +12,6 @@ import org.example.CommonEntity;
 public class Policy extends CommonEntity {
     // 保单号
     private String no;
+    // 业务员id
+    private String accountId;
 }
