@@ -1,6 +1,6 @@
 package org.example.module;
 
-import org.example.core.Policy;
+import org.example.core.policy.Policy;
 
 /**
  * 应付工具类

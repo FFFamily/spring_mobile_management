@@ -1,8 +1,10 @@
-package org.example.core;
+package org.example.core.policy;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.example.entity.CommonEntity;
+
+import java.util.List;
 
 
 @EqualsAndHashCode(callSuper = false)
@@ -12,4 +14,8 @@ public class Policy extends CommonEntity {
     private String no;
     // 业务员id
     private String accountId;
+    // 出单类型
+    private Integer saleType;
+    // 分项保费
+    private QuotePlan quotePlan;
 }

@@ -2,7 +2,7 @@ package org.example.listener;
 
 import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.example.core.Policy;
+import org.example.core.policy.Policy;
 import org.example.module.PaySettlementModule;
 import org.example.module.ReceivableSettlementModule;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;

@@ -2,13 +2,11 @@ package org.example.service;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.rabbitmq.tools.json.JSONUtil;
-import org.example.core.Policy;
+import org.example.core.policy.Policy;
 import org.example.entity.CommonException;
 
 import org.example.mapper.PolicyMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
