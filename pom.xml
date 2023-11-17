@@ -29,6 +29,7 @@
         <druid.version>1.2.16</druid.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <json.version>2.0.42</json.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
     </properties>
 
     <dependencyManagement>
@@ -80,6 +81,13 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
+            <!--对象拷贝-->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+
 
 
         </dependencies>

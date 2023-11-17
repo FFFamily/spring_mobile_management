@@ -5,5 +5,5 @@ import lombok.Data;
 import java.util.HashMap;
 @Data
 public class CommissionRate {
-    private HashMap<String,String> promotion;
+    private HashMap<String,PromotionItem> promotion;
 }
