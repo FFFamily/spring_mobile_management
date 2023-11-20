@@ -18,13 +18,15 @@ public class PolicyCreateMQListener {
 
     @Resource
     private ReceivableSettlementModule receivableSettlementModule;
+    @Resource
+    private PaySettlementModule paySettlementModule;
     @RabbitHandler
     public void process(String message) {
         Policy policy = JSON.parseObject(message, Policy.class);
         log.info("保单承保消息  : {}", policy);
         try {
             receivableSettlementModule.addReceivableSettlementByPolicy(policy);
-            PaySettlementModule.addPaySettlementByPolicy(policy);
+            paySettlementModule.addPaySettlementByPolicy(policy);
         }catch (Exception e){
             log.error("保单生成应收应付记录出现错误，正在删除相关记录");
         }

@@ -4,16 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.core.policy.CommissionRate;
 import org.example.core.policy.Policy;
 import org.example.core.policy.PromotionItem;
-import org.example.entity.CommonEntity;
-import org.example.entity.ReceivableSettlement;
-import org.example.entity.SettlementAgent;
-import org.example.entity.SettlementProduct;
+import org.example.entity.*;
 import org.example.enums.FinanceRecordOriginTypeEnum;
+import org.example.mapper.PaySettlementMapper;
 import org.example.mapper.ReceivableSettlementMapper;
-import org.example.module.HistoryModule;
-import org.example.module.ReceivableSettlementModule;
-import org.example.module.SettlementAgentModule;
-import org.example.module.SettlementModule;
+import org.example.module.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -24,8 +19,9 @@ public class Promotion {
     @Resource
     private ReceivableSettlementMapper receivableSettlementMapper;
     @Resource
+    private PaySettlementMapper paySettlementMapper;
+    @Resource
     private HistoryModule historyModule;
-
     @Resource
     private SettlementAgentModule settlementAgentModule;
 
@@ -81,17 +77,79 @@ public class Promotion {
                         log.info("【Promotion】准备添加应收记录：{}",receivableSettlement);
                     }
                     receivableSettlementMapper.insetReceivableSettlementList(receivableSettlementList);
+                    // 构建历史记录
+                    historyModule.initHistory(receivableSettlementList, policy);
                 }else {
                     // 说明没有配置结算产品，只会生成一条结算记录
                     log.info("该险种：{} 没有配置结算主体",policy.getInsuranceId());
                     ReceivableSettlement receivableSettlement = ReceivableSettlementModule.createReceivableSettlement();
                     // 进行计算
                     ReceivableSettlementModule.getAndSetAllResult(receivableSettlement);
+                    log.info("【Promotion】准备添加应收记录：{}",receivableSettlement);
                     receivableSettlementMapper.insert(receivableSettlement);
                     // 构建历史记录
                     historyModule.initHistory(Collections.singletonList(receivableSettlement), policy);
                 }
             }
         }
+    }
+
+    public void AddPaySettlementByPromotion(Policy policy, FinanceRecordOriginTypeEnum financeRecordOriginTypeEnum,Integer finalSettlementSettlementMode) {
+        // TODO 远程调用 Account
+        boolean isCertificated = false;
+        if (isCertificated){
+            log.info("该用户 {} 没有认证，该单的推广费为0",policy.getAccountId());
+        }
+        // TODO 判断是否为线下录入险种
+        List<CommissionRate> commissionRates = policy.getQuotePlan().getCommissionRates();
+        for (ListIterator<CommissionRate> it = commissionRates.listIterator(); it.hasNext(); ) {
+            // 期数
+            int periodIndex = it.previousIndex() + 1;
+            HashMap<String, PromotionItem> promotion = Optional.ofNullable(it.next().getPromotion()).orElse(new HashMap<>());
+            for (Map.Entry<String, PromotionItem> item : promotion.entrySet()) {
+                String interfaceFieldId = item.getKey();
+                PromotionItem value = item.getValue();
+                // 保费
+                Long premium = value.getPremium();
+                if (SettlementModule.checkPremium(premium)){
+                    return;
+                }
+                BigDecimal[] calculated = PaySettlementModule.calculateOtherIncomeInfo(
+                        isCertificated,
+                        premium,
+                        value.getOrgToAccount(),
+                        value.getSuperiorToAccountOrg(),
+                        value.getFinalSettlementToOrg()
+                );
+                BigDecimal promotionMoney = calculated[0];
+                BigDecimal orgPromotionMoney = calculated[1];
+                BigDecimal finalSettlementOrgPromotionMoney = calculated[2];
+                // 是否已经过了续期时间，一般新单不会，但是线下单录入可能会
+                var reachRenewal = SettlementModule.checkReachRenewal(policy, periodIndex);
+                // TODO 分项保费名称
+                String interfaceFieldName = "TODO";
+                BigDecimal payRate = PaySettlementModule.getPayRate(finalSettlementSettlementMode, value.getFinalSettlementToOrg(), value.getOrgToAccount());
+                PaySettlement paySettlement =  PaySettlementModule.createPaySettlement(
+                        policy,
+                        null,
+                        periodIndex,
+                        interfaceFieldId,
+                        interfaceFieldName,
+                        premium,
+                        finalSettlementSettlementMode,
+                        payRate,
+                        reachRenewal,
+                        null,
+                        financeRecordOriginTypeEnum
+                        );
+                paySettlement.setIncludeTaxPayMoney(PaySettlementModule.calculate(paySettlement).longValue());
+                paySettlementMapper.insert(paySettlement);
+                log.info("【Promotion】准备添加应付记录 {}",paySettlement);
+                // 创建历史记录
+                HistoryModule.initPaymentSettlementHistory(paySettlement, policy);
+            }
+
+        }
+
     }
 }

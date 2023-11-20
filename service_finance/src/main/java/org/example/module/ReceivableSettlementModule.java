@@ -68,12 +68,9 @@ public class ReceivableSettlementModule extends SettlementModule {
     private  void online(Policy policy){
         String key = "income_record_add_" + policy.getAccountId();
         synchronized (key){
+            // 邀请奖励 和 活动奖励 线上出单不会有应收
             log.info("【Online】添加保单对应的系统出单类型数据");
             promotion.AddReceivableByPromotion(policy, FinanceRecordOriginTypeEnum.SYSTEM);
-            log.info("【Online】添加保单对应的邀请奖励类型数据");
-            InviterAward.AddReceivableByInviterAward(policy);
-            log.info("【Online】添加保单对应的活动奖励类型数据");
-            Activity.AddReceivableByActivity(policy);
         }
     }
 

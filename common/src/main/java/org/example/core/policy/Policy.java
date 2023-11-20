@@ -20,4 +20,7 @@ public class Policy extends CommonEntity {
     private QuotePlan quotePlan;
     // 险种id
     private String insuranceId;
+    // 金额支付方式
+    private String payPeriodUnit;
+
 }
