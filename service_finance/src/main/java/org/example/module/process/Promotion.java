@@ -9,12 +9,14 @@ import org.example.enums.FinanceRecordOriginTypeEnum;
 import org.example.mapper.PaySettlementMapper;
 import org.example.mapper.ReceivableSettlementMapper;
 import org.example.module.*;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 @Slf4j
+@Component
 public class Promotion {
     @Resource
     private ReceivableSettlementMapper receivableSettlementMapper;

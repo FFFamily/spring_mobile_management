@@ -2,7 +2,6 @@ package org.example.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.example.CommonEntity;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class Org extends CommonEntity {
