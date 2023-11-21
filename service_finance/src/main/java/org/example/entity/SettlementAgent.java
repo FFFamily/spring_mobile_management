@@ -19,7 +19,7 @@ public class SettlementAgent extends CommonEntity{
     private List<SettlementAgentInfo> info;
 
     @Data
-    static class SettlementAgentInfo{
+    public static class SettlementAgentInfo{
         // 结算费率
         private BigDecimal feeRate;
         // 结算税率

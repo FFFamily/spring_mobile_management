@@ -93,8 +93,7 @@ public class ReceivableSettlementModule extends SettlementModule {
             // 查询结算产品
             return staticSettlementProductMapper
                     .selectOne(new LambdaQueryWrapper<SettlementProduct>()
-                            .eq(SettlementProduct::getInsuranceId, policy.getInsuranceId())
-                    );
+                            .eq(SettlementProduct::getInsuranceId, policy.getInsuranceId()));
         }
     }
 

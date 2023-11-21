@@ -9,13 +9,13 @@ import java.math.BigDecimal;
 @Setter
 public class ReceivableSettlement extends CommonEntity {
     // 状态
-    private Long status;
+    private Integer status;
     // 创建场景
-    private Long createdScene;
+    private Integer createdScene;
     // 应收类型
-    private Long type;
+    private Integer type;
     // 保单类型
-    private Long policyType;
+    private Integer policyType;
     // 保单id
     private String policyId;
     // 保单号
