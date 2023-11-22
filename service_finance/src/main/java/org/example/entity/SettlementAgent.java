@@ -12,7 +12,7 @@ public class SettlementAgent extends CommonEntity{
     // 结算主体名称
     private String name;
     // 结算主体类型
-    private String type;
+    private Integer type;
     // 机构
     private String orgId;
     // 内容

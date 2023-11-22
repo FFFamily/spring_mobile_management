@@ -31,4 +31,12 @@ public class PolicyService {
         policyMapper.insert(policy);
         rabbitTemplate.convertAndSend("RootDirectExchange","RootDirectRouting", JSON.toJSONString(policy));
     }
+
+    public Policy findPolicyById(String policyId) {
+        Policy policy = policyMapper.findById(policyId);
+        if (policy == null){
+            throw new CommonException("未能查询到对应的保单："+policyId);
+        }
+        return policy;
+    }
 }

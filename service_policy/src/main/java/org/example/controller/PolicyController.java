@@ -5,10 +5,7 @@ import org.example.core.policy.Policy;
 import org.example.entity.CommonResponse;
 
 import org.example.service.PolicyService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -23,5 +20,11 @@ public class PolicyController {
         log.info("开始创建Policy，{}",request);
         policyService.createPolicy(request);
         return CommonResponse.success(null);
+    }
+
+    @GetMapping("/getById/{policyId}")
+    public CommonResponse<Policy> findPolicyById(@PathVariable String policyId){
+        log.info("查询指定id的保单信息，{}",policyId);
+        return CommonResponse.success(policyService.findPolicyById(policyId));
     }
 }

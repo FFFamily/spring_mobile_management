@@ -7,6 +7,10 @@ import java.util.List;
 
 @Data
 public class PromotionItem {
+    // 分项保费Id
+    private String id;
+    // 分项保费名称
+    private String name;
     // 上游手续费
     private BigDecimal insuranceCompanyToSystem;
     // 保费

@@ -22,10 +22,11 @@ public class Policy extends CommonEntity {
     private Integer saleType;
     // 分项保费
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private QuotePlan quotePlan;
+    private List<PromotionItem> Promotions;
     // 险种id
     private String insuranceId;
     // 金额支付方式
     private String payPeriodUnit;
-
+    // 承保时间
+    private Long insureAt;
 }

@@ -26,6 +26,15 @@ public abstract class SettlementModule {
         return false;
     }
 
+
+    /**
+     * 四舍五入
+     */
+    public static BigDecimal setScale(BigDecimal number) {
+        if (number == null) return BigDecimal.ZERO;
+        return number.setScale(0, RoundingMode.HALF_UP);
+    }
+
     /**
      * rate 转 num ： 12.12% =》 0.1212
      */

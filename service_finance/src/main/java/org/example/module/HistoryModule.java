@@ -2,11 +2,10 @@ package org.example.module;
 
 import org.example.core.policy.Policy;
 import org.example.entity.PaySettlement;
-import org.example.entity.ReceivableSettlement;
+import org.example.entity.receivable_settlement.ReceivableSettlement;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 @Component
 public class HistoryModule {

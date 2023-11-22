@@ -5,6 +5,7 @@ import org.example.core.policy.CommissionRate;
 import org.example.core.policy.Policy;
 import org.example.core.policy.PromotionItem;
 import org.example.entity.*;
+import org.example.entity.receivable_settlement.ReceivableSettlement;
 import org.example.enums.FinanceRecordOriginTypeEnum;
 import org.example.mapper.PaySettlementMapper;
 import org.example.mapper.ReceivableSettlementMapper;
@@ -33,26 +34,25 @@ public class Promotion {
      * @param type 应付来源类型
      */
     public void AddReceivableByPromotion(Policy policy, FinanceRecordOriginTypeEnum type){
-        List<CommissionRate> commissionRates = policy.getQuotePlan().getCommissionRates();
-        for (ListIterator<CommissionRate> it = commissionRates.listIterator(); it.hasNext(); ) {
+        List<PromotionItem> commissionRates = policy.getPromotions();
+        for (ListIterator<PromotionItem> it = commissionRates.listIterator(); it.hasNext(); ) {
             // 期数
             int periodIndex = it.previousIndex() + 1;
-            CommissionRate commissionRate = it.next();
-            HashMap<String, PromotionItem> promotion = Optional.ofNullable(commissionRate.getPromotion()).orElse(new HashMap<>());
-            for (Map.Entry<String, PromotionItem> item : promotion.entrySet()) {
+            PromotionItem item = it.next();
+//            HashMap<String, PromotionItem> promotion = Optional.ofNullable(commissionRate.getPromotion()).orElse(new HashMap<>());
+//            for (Map.Entry<String, PromotionItem> item : promotion.entrySet()) {
                 // 分项保费id
-                String interfaceFieldId = item.getKey();
+                String interfaceFieldId = item.getId();
                 // TODO 分项保费名称
-                String interfaceFieldName = "TODO";
-                PromotionItem value = item.getValue();
+                String interfaceFieldName = item.getName();
                 // 上游手续费
-                BigDecimal insuranceCompanyToSystem = value.getInsuranceCompanyToSystem();
-                Long premium = value.getPremium();
+                BigDecimal insuranceCompanyToSystem = item.getInsuranceCompanyToSystem();
+                Long premium = item.getPremium();
                 if (SettlementModule.checkPremium(premium)){
                     return;
                 }
                 // 是否已经过了续期时间，一般新单不会，但是线下单录入可能会（目前没有续期）
-                SettlementProduct settlementProduct = ReceivableSettlementModule.getSettlementProduct(policy, value);
+                SettlementProduct settlementProduct = ReceivableSettlementModule.getSettlementProduct(policy, item);
                 List<ReceivableSettlement> receivableSettlementList = new ArrayList<>();
                 if (settlementProduct != null){
                     // 查询对应的结算主体信息
@@ -74,7 +74,7 @@ public class Promotion {
                         }
                         settlementAgentModule.setAgent(agentHashMap.get(settlementAgent.getId()),receivableSettlement);
                         // 进行计算
-                        ReceivableSettlementModule.getAndSetAllResult(receivableSettlement);
+                        CalculateModule.getAndSetAllResult(receivableSettlement);
                         receivableSettlementList.add(receivableSettlement);
                         log.info("【Promotion】准备添加应收记录：{}",receivableSettlement);
                     }
@@ -86,13 +86,13 @@ public class Promotion {
                     log.info("该险种：{} 没有配置结算主体",policy.getInsuranceId());
                     ReceivableSettlement receivableSettlement = ReceivableSettlementModule.createReceivableSettlement();
                     // 进行计算
-                    ReceivableSettlementModule.getAndSetAllResult(receivableSettlement);
+                    CalculateModule.getAndSetAllResult(receivableSettlement);
                     log.info("【Promotion】准备添加应收记录：{}",receivableSettlement);
                     receivableSettlementMapper.insert(receivableSettlement);
                     // 构建历史记录
                     historyModule.initHistory(Collections.singletonList(receivableSettlement), policy);
                 }
-            }
+//            }
         }
     }
 
@@ -103,25 +103,26 @@ public class Promotion {
             log.info("该用户 {} 没有认证，该单的推广费为0",policy.getAccountId());
         }
         // TODO 判断是否为线下录入险种
-        List<CommissionRate> commissionRates = policy.getQuotePlan().getCommissionRates();
-        for (ListIterator<CommissionRate> it = commissionRates.listIterator(); it.hasNext(); ) {
+        List<PromotionItem> promotions = policy.getPromotions();
+        for (ListIterator<PromotionItem> it = promotions.listIterator(); it.hasNext(); ) {
             // 期数
             int periodIndex = it.previousIndex() + 1;
-            HashMap<String, PromotionItem> promotion = Optional.ofNullable(it.next().getPromotion()).orElse(new HashMap<>());
-            for (Map.Entry<String, PromotionItem> item : promotion.entrySet()) {
-                String interfaceFieldId = item.getKey();
-                PromotionItem value = item.getValue();
+            PromotionItem item = it.next();
+//            HashMap<String, PromotionItem> promotion = Optional.ofNullable(it.next().getPromotion()).orElse(new HashMap<>());
+//            for (Map.Entry<String, PromotionItem> item : promotion.entrySet()) {
+                String interfaceFieldId = item.getId();
+
                 // 保费
-                Long premium = value.getPremium();
+                Long premium = item.getPremium();
                 if (SettlementModule.checkPremium(premium)){
                     return;
                 }
                 BigDecimal[] calculated = PaySettlementModule.calculateOtherIncomeInfo(
                         isCertificated,
                         premium,
-                        value.getOrgToAccount(),
-                        value.getSuperiorToAccountOrg(),
-                        value.getFinalSettlementToOrg()
+                        item.getOrgToAccount(),
+                        item.getSuperiorToAccountOrg(),
+                        item.getFinalSettlementToOrg()
                 );
                 BigDecimal promotionMoney = calculated[0];
                 BigDecimal orgPromotionMoney = calculated[1];
@@ -130,7 +131,7 @@ public class Promotion {
                 var reachRenewal = SettlementModule.checkReachRenewal(policy, periodIndex);
                 // TODO 分项保费名称
                 String interfaceFieldName = "TODO";
-                BigDecimal payRate = PaySettlementModule.getPayRate(finalSettlementSettlementMode, value.getFinalSettlementToOrg(), value.getOrgToAccount());
+                BigDecimal payRate = PaySettlementModule.getPayRate(finalSettlementSettlementMode, item.getFinalSettlementToOrg(), item.getOrgToAccount());
                 PaySettlement paySettlement =  PaySettlementModule.createPaySettlement(
                         policy,
                         null,
@@ -149,7 +150,7 @@ public class Promotion {
                 log.info("【Promotion】准备添加应付记录 {}",paySettlement);
                 // 创建历史记录
                 HistoryModule.initPaymentSettlementHistory(paySettlement, policy);
-            }
+//            }
 
         }
 

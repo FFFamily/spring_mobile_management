@@ -1,7 +1,9 @@
-package org.example.entity;
+package org.example.entity.receivable_settlement;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.entity.CommonEntity;
+import org.example.entity.SettlementAgent;
 
 import java.math.BigDecimal;
 
@@ -29,7 +31,7 @@ public class ReceivableSettlement extends CommonEntity {
     // 开票项目名称
     private String billName;
     // 结算主体
-    private Object agent;
+    private ReceivableSettlementAgent agent;
     // 不含税保费
     private Long excludeTaxPremium;
     // 含税手续费

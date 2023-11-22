@@ -6,23 +6,20 @@ import org.example.copy_mapper.SettlementProductCopyModule;
 import org.example.core.policy.Policy;
 import org.example.core.policy.PromotionItem;
 import org.example.entity.CommonException;
-import org.example.entity.ReceivableSettlement;
+import org.example.entity.receivable_settlement.ReceivableSettlement;
 import org.example.entity.SettlementProduct;
+import org.example.entity.receivable_settlement.ReceivableSettlementAgent;
 import org.example.enums.FinanceRecordOriginTypeEnum;
 import org.example.enums.SaleTypeEnum;
 import org.example.mapper.SettlementProductMapper;
-import org.example.module.process.Activity;
-import org.example.module.process.InviterAward;
 import org.example.module.process.Promotion;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.HashMap;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 应收工具类
@@ -38,12 +35,7 @@ public class ReceivableSettlementModule extends SettlementModule {
     @Resource
     private Promotion promotion;
 
-    /**
-     * 计算所有金额
-     */
-    public static void getAndSetAllResult(ReceivableSettlement receivableSettlement) {
 
-    }
 
     @PostConstruct
     public void init(){
