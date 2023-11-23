@@ -9,11 +9,14 @@ import java.util.List;
 public class PromotionItem {
     // 分项保费Id
     private String id;
+    // 保单id
+    private String policyId;
     // 分项保费名称
     private String name;
     // 上游手续费
     private BigDecimal insuranceCompanyToSystem;
     // 保费
+    // TODO 保费真的需要吗？
     private Long premium;
     // 机构给业务员 下发佣金
     private BigDecimal orgToAccount;

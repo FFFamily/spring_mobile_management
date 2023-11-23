@@ -1,7 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.mapper.PolicyMapper">
-    <select id="findById" resultType="org.example.core.policy.Policy">
+    <resultMap id="policy" type="org.example.core.policy.Policy">
+        <result column="id" property="id"/>
+        <result column="no" property="no"/>
+        <result column="account_id" property="accountId"/>
+        <result column="insurance_id" property="insuranceId"/>
+        <result column="sale_type" property="saleType"/>
+        <result column="insure_at" property="insureAt"/>
+        <result column="pay_period_unit" property="payPeriodUnit"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <collection property="promotions" column="promotions"
+                    ofType="org.example.core.policy.PromotionItem"
+        select="findPromotionByPolicyId">
+        </collection>
+    </resultMap>
 
+    <resultMap id="promotion_item" type="org.example.core.policy.PromotionItem">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="policy_id" property="policyId"/>
+        <result column="final_settlement_to_org" property="finalSettlementToOrg"/>
+        <result column="insurance_company_to_system" property="insuranceCompanyToSystem"/>
+        <result column="org_to_account" property="orgToAccount"/>
+        <result column="premium" property="premium"/>
+        <result column="superior_to_account_org" property="superiorToAccountOrg"/>
+    </resultMap>
+
+    <select id="findPromotionByPolicyId" resultMap="promotion_item">
+        select * from promotion_item where id = #{policyId}
     </select>
+
+    <select id="findById" resultMap="policy">
+        select * from policy
+            left join promotion_item pi on policy.id = pi.policy_id
+        where policy.id = #{policyId};
+    </select>
+    
 </mapper>

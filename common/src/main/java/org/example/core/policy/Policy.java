@@ -21,8 +21,8 @@ public class Policy extends CommonEntity {
     // 出单类型
     private Integer saleType;
     // 分项保费
-    @TableField(typeHandler = JacksonTypeHandler.class)
-    private List<PromotionItem> Promotions;
+//    @TableField(typeHandler = JacksonTypeHandler.class)
+    private List<PromotionItem> promotions;
     // 险种id
     private String insuranceId;
     // 金额支付方式
