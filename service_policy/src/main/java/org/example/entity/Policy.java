@@ -1,11 +1,9 @@
-package org.example.core.policy;
+package org.example.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.example.entity.CommonEntity;
+import org.example.core.policy.PromotionItemDto;
 
 import java.util.List;
 
@@ -20,9 +18,6 @@ public class Policy extends CommonEntity {
     private String accountId;
     // 出单类型
     private Integer saleType;
-    // 分项保费
-//    @TableField(typeHandler = JacksonTypeHandler.class)
-    private List<PromotionItem> promotions;
     // 险种id
     private String insuranceId;
     // 金额支付方式

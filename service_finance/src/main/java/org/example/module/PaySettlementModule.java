@@ -1,7 +1,7 @@
 package org.example.module;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.core.policy.Policy;
+import org.example.core.policy.PolicyDto;
 import org.example.entity.CommonException;
 import org.example.entity.PaySettlement;
 import org.example.enums.FinanceRecordOriginTypeEnum;
@@ -29,7 +29,7 @@ public class PaySettlementModule extends SettlementModule {
     @Resource
     private InviterAward inviterAward;
 
-    public static PaySettlement createPaySettlement(Policy policy, Object o, int periodIndex, String interfaceFieldId, String interfaceFieldName, Long premium, Integer finalSettlementSettlementMode, BigDecimal payRate, boolean reachRenewal, Object o1, FinanceRecordOriginTypeEnum financeRecordOriginTypeEnum) {
+    public static PaySettlement createPaySettlement(PolicyDto policyDto, Object o, int periodIndex, String interfaceFieldId, String interfaceFieldName, Long premium, Integer finalSettlementSettlementMode, BigDecimal payRate, boolean reachRenewal, Object o1, FinanceRecordOriginTypeEnum financeRecordOriginTypeEnum) {
         return new PaySettlement();
     }
 
@@ -40,11 +40,11 @@ public class PaySettlementModule extends SettlementModule {
     /**
      * 添加应付
      */
-    public  void addPaySettlementByPolicy(Policy policy){
-        int saleType = policy.getSaleType();
+    public  void addPaySettlementByPolicy(PolicyDto policyDto){
+        int saleType = policyDto.getSaleType();
         SaleTypeEnum saleTypeEnum = SaleTypeEnum.of(saleType);
         switch (saleTypeEnum){
-            case ONLINE -> online(policy);
+            case ONLINE -> online(policyDto);
             case OFFLINE -> offline();
             default -> throw new CommonException("【应收应付】不支持的出单类型");
         }
@@ -53,11 +53,11 @@ public class PaySettlementModule extends SettlementModule {
     /**
      * 线上
      */
-    private  void online(Policy policy){
-        String key = "income_record_add_" + policy.getAccountId();
+    private  void online(PolicyDto policyDto){
+        String key = "income_record_add_" + policyDto.getAccountId();
         synchronized (key){
             log.info("【Online】添加保单对应的系统出单类型应付数据");
-            promotion.AddPaySettlementByPromotion(policy, FinanceRecordOriginTypeEnum.SYSTEM,null);
+            promotion.AddPaySettlementByPromotion(policyDto, FinanceRecordOriginTypeEnum.SYSTEM,null);
 //            log.info("【Online】添加保单对应的邀请奖励类型应付数据");
 //            inviterAward.AddPaySettlementByInviterAward(policy,FinanceRecordOriginTypeEnum.SYSTEM);
 //            log.info("【Online】添加保单对应的活动奖励类型应付数据");

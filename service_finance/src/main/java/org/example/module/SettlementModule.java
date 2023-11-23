@@ -1,11 +1,10 @@
 package org.example.module;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.core.policy.Policy;
+import org.example.core.policy.PolicyDto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Objects;
 
 /**
  * 通用方法封装
@@ -47,10 +46,10 @@ public abstract class SettlementModule {
     /**
      * 是否已经过了续期时间，一般新单不会，但是线下单录入可能会
      *
-     * @param policy      保单
+     * @param policyDto      保单
      * @param periodIndex 期数
      * @return true 过了续期 false 没有过期
      */
-    public static boolean checkReachRenewal(Policy policy, int periodIndex) {
+    public static boolean checkReachRenewal(PolicyDto policyDto, int periodIndex) {
         return false;
     }}

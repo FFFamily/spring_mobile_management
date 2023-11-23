@@ -2,7 +2,7 @@ package org.example.module;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.example.core.policy.Policy;
+import org.example.core.policy.PolicyDto;
 import org.example.entity.Bill;
 import org.example.entity.CommonException;
 import org.example.entity.receivable_settlement.ReceivableSettlement;
@@ -101,9 +101,9 @@ public class SettlementAgentModule {
      * 判断保单是否匹配上对应的结算主体
      */
     private Optional<SettlementAgent.SettlementAgentInfo> getAgentInfoByPolicyId(SettlementAgent settlementAgent, String policyId) {
-        Policy policy = policyFeign.findPolicyByPolicyId(policyId);
+        PolicyDto policyDto = policyFeign.findPolicyByPolicyId(policyId);
         // 拿到承保时间
-        Long insureAt = policy.getInsureAt();
+        Long insureAt = policyDto.getInsureAt();
         return getAgentCurrentSettlementInfo(settlementAgent,insureAt);
     }
 

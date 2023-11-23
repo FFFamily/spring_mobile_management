@@ -3,12 +3,11 @@ package org.example.module;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.example.copy_mapper.SettlementProductCopyModule;
-import org.example.core.policy.Policy;
-import org.example.core.policy.PromotionItem;
+import org.example.core.policy.PolicyDto;
+import org.example.core.policy.PromotionItemDto;
 import org.example.entity.CommonException;
 import org.example.entity.receivable_settlement.ReceivableSettlement;
 import org.example.entity.SettlementProduct;
-import org.example.entity.receivable_settlement.ReceivableSettlementAgent;
 import org.example.enums.FinanceRecordOriginTypeEnum;
 import org.example.enums.SaleTypeEnum;
 import org.example.mapper.SettlementProductMapper;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,11 +42,11 @@ public class ReceivableSettlementModule extends SettlementModule {
     /**
      * 添加应收
      */
-    public  void addReceivableSettlementByPolicy(Policy policy){
-        int saleType = policy.getSaleType();
+    public  void addReceivableSettlementByPolicy(PolicyDto policyDto){
+        int saleType = policyDto.getSaleType();
         SaleTypeEnum saleTypeEnum = SaleTypeEnum.of(saleType);
         switch (saleTypeEnum){
-            case ONLINE -> online(policy);
+            case ONLINE -> online(policyDto);
             case OFFLINE -> offline();
             default -> throw new CommonException("【应收应付】不支持的出单类型");
         }
@@ -57,12 +55,12 @@ public class ReceivableSettlementModule extends SettlementModule {
     /**
      * 线上
      */
-    private  void online(Policy policy){
-        String key = "income_record_add_" + policy.getAccountId();
+    private  void online(PolicyDto policyDto){
+        String key = "income_record_add_" + policyDto.getAccountId();
         synchronized (key){
             // 邀请奖励 和 活动奖励 线上出单不会有应收
             log.info("【Online】添加保单对应的系统出单类型数据");
-            promotion.AddReceivableByPromotion(policy, FinanceRecordOriginTypeEnum.SYSTEM);
+            promotion.AddReceivableByPromotion(policyDto, FinanceRecordOriginTypeEnum.SYSTEM);
         }
     }
 
@@ -74,10 +72,10 @@ public class ReceivableSettlementModule extends SettlementModule {
     }
 
 
-    public static SettlementProduct getSettlementProduct(Policy policy, PromotionItem promotionItem) {
-        if (promotionItem.getSettlementAgents() != null && !promotionItem.getSettlementAgents().isEmpty()) {
+    public static SettlementProduct getSettlementProduct(PolicyDto policyDto, PromotionItemDto promotionItemDto) {
+        if (promotionItemDto.getSettlementAgents() != null && !promotionItemDto.getSettlementAgents().isEmpty()) {
             List<SettlementProduct.ProductSettlementAgent> settlementAgents =
-                    promotionItem.getSettlementAgents().stream().map(SettlementProductCopyModule.INSTANCE::convert).collect(Collectors.toList());
+                    promotionItemDto.getSettlementAgents().stream().map(SettlementProductCopyModule.INSTANCE::convert).collect(Collectors.toList());
             SettlementProduct settlementProduct = new SettlementProduct();
             settlementProduct.setSettlementAgents(settlementAgents);
             return settlementProduct;
@@ -85,7 +83,7 @@ public class ReceivableSettlementModule extends SettlementModule {
             // 查询结算产品
             return staticSettlementProductMapper
                     .selectOne(new LambdaQueryWrapper<SettlementProduct>()
-                            .eq(SettlementProduct::getInsuranceId, policy.getInsuranceId()));
+                            .eq(SettlementProduct::getInsuranceId, policyDto.getInsuranceId()));
         }
     }
 

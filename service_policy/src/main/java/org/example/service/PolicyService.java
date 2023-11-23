@@ -2,41 +2,59 @@ package org.example.service;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.example.core.policy.Policy;
+import org.example.core.policy.PolicyDto;
 import org.example.entity.CommonException;
 
+import org.example.entity.Policy;
+import org.example.entity.PromotionItem;
 import org.example.mapper.PolicyMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class PolicyService {
     @Resource
     private PolicyMapper policyMapper;
     @Resource
+    private PromotionItemService promotionItemService;
+    @Resource
     private RabbitTemplate rabbitTemplate;
 
     /**
      * 创建 Policy
-     * @param policy
      */
-    public void createPolicy(Policy policy){
+    public void createPolicy(PolicyDto policyDto){
         Policy oldPolicy = policyMapper.selectOne(new LambdaQueryWrapper<Policy>()
-                .eq(Policy::getNo, policy.getNo()));
+                .eq(Policy::getNo, policyDto.getNo()));
         if (oldPolicy != null){
             throw new CommonException("重复的policyNo");
         }
+        Policy policy = new Policy();
+        BeanUtils.copyProperties(policyDto,policy);
         policyMapper.insert(policy);
-        rabbitTemplate.convertAndSend("RootDirectExchange","RootDirectRouting", JSON.toJSONString(policy));
+        List<PromotionItem> list = policyDto.getPromotions().stream().map(item -> {
+            PromotionItem promotionItem = new PromotionItem();
+            promotionItem.setPolicyId(policy.getId());
+            promotionItem.setName(item.getName());
+            promotionItem.setPremium(item.getPremium());
+            promotionItem.setFinalSettlementToOrg(item.getFinalSettlementToOrg());
+            promotionItem.setOrgToAccount(item.getOrgToAccount());
+            promotionItem.setInsuranceCompanyToSystem(item.getInsuranceCompanyToSystem());
+            return promotionItem;
+        }).toList();
+        promotionItemService.insertList(list);
+        rabbitTemplate.convertAndSend("RootDirectExchange","RootDirectRouting", JSON.toJSONString(policyDto));
     }
 
-    public Policy findPolicyById(String policyId) {
-        Policy policy = policyMapper.findById(policyId);
-        if (policy == null){
+    public PolicyDto findPolicyById(String policyId) {
+        PolicyDto policyDto = policyMapper.findById(policyId);
+        if (policyDto == null){
             throw new CommonException("未能查询到对应的保单："+policyId);
         }
-        return policy;
+        return policyDto;
     }
 }

@@ -1,4 +1,4 @@
-package org.example.core.policy;
+package org.example.entity;
 
 import lombok.Data;
 
