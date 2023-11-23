@@ -11,6 +11,7 @@ import org.example.mapper.PolicyMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,6 +28,7 @@ public class PolicyService {
     /**
      * 创建 Policy
      */
+    @Transactional(rollbackFor = Exception.class)
     public void createPolicy(PolicyDto policyDto){
         Policy oldPolicy = policyMapper.selectOne(new LambdaQueryWrapper<Policy>()
                 .eq(Policy::getNo, policyDto.getNo()));
@@ -34,6 +36,7 @@ public class PolicyService {
             throw new CommonException("重复的policyNo");
         }
         Policy policy = new Policy();
+
         BeanUtils.copyProperties(policyDto,policy);
         policyMapper.insert(policy);
         List<PromotionItem> list = policyDto.getPromotions().stream().map(item -> {

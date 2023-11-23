@@ -10,7 +10,6 @@ import java.util.List;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
-@TableName(value = "policy",autoResultMap = true)
 public class PolicyDto extends CommonEntity {
     // 保单号
     private String no;

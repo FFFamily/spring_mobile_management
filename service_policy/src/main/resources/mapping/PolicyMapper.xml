@@ -11,26 +11,32 @@
         <result column="pay_period_unit" property="payPeriodUnit"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
-        <collection property="promotions" column="promotions"
-                    ofType="org.example.core.policy.PromotionItemDto"
-        select="findPromotionByPolicyId">
+        <collection property="promotions" ofType="org.example.entity.PromotionItem">
+            <result column="promotion_id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="policy_id" property="policyId"/>
+            <result column="final_settlement_to_org" property="finalSettlementToOrg"/>
+            <result column="insurance_company_to_system" property="insuranceCompanyToSystem"/>
+            <result column="org_to_account" property="orgToAccount"/>
+            <result column="premium" property="premium"/>
+            <result column="superior_to_account_org" property="superiorToAccountOrg"/>
         </collection>
     </resultMap>
 
-    <resultMap id="promotion_item" type="org.example.entity.PromotionItem">
-        <result column="id" property="id"/>
-        <result column="name" property="name"/>
-        <result column="policy_id" property="policyId"/>
-        <result column="final_settlement_to_org" property="finalSettlementToOrg"/>
-        <result column="insurance_company_to_system" property="insuranceCompanyToSystem"/>
-        <result column="org_to_account" property="orgToAccount"/>
-        <result column="premium" property="premium"/>
-        <result column="superior_to_account_org" property="superiorToAccountOrg"/>
-    </resultMap>
+<!--    <resultMap id="promotion_item" type="org.example.entity.PromotionItem">-->
+<!--        <result column="id" property="id"/>-->
+<!--        <result column="name" property="name"/>-->
+<!--        <result column="policy_id" property="policyId"/>-->
+<!--        <result column="final_settlement_to_org" property="finalSettlementToOrg"/>-->
+<!--        <result column="insurance_company_to_system" property="insuranceCompanyToSystem"/>-->
+<!--        <result column="org_to_account" property="orgToAccount"/>-->
+<!--        <result column="premium" property="premium"/>-->
+<!--        <result column="superior_to_account_org" property="superiorToAccountOrg"/>-->
+<!--    </resultMap>-->
 
-    <select id="findPromotionByPolicyId" resultMap="promotion_item">
-        select * from promotion_item where id = #{policyId}
-    </select>
+<!--    <select id="findPromotionByPolicyId" resultMap="promotion_item">-->
+<!--        select * from promotion_item where id = #{policyId}-->
+<!--    </select>-->
 
     <select id="findById" resultMap="policyDto">
         select * from policy

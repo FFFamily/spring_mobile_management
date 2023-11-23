@@ -3,10 +3,17 @@
 <mapper namespace="org.example.mapper.PromotionItemMapper">
 
     <insert id="savePromotionItems">
-        insert into promotion_item values
+        insert into promotion_item  (id, policy_id, name, insurance_company_to_system, premium, org_to_account, superior_to_account_org, final_settlement_to_org) values
         <foreach collection="list" separator="," item="item" >
             (
-             #{item.id}
+            #{item.id},
+            #{item.policyId},
+            #{item.name},
+            #{item.insuranceCompanyToSystem},
+            #{item.premium},
+            #{item.orgToAccount},
+            #{item.superiorToAccountOrg},
+            #{item.finalSettlementToOrg}
             )
         </foreach>
     </insert>

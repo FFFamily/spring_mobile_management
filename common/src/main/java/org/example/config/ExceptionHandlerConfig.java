@@ -16,4 +16,11 @@ public class ExceptionHandlerConfig {
     public CommonResponse<String> handleBusinessException(CommonException e) {
         return CommonResponse.error(e.getMessage());
     }
+
+    @ExceptionHandler(value = RuntimeException.class)
+    @ResponseBody
+    public CommonResponse<String> handleRuntimeException(RuntimeException e) {
+        e.printStackTrace();
+        return CommonResponse.error("系统执行出现错误："+e.getMessage());
+    }
 }
