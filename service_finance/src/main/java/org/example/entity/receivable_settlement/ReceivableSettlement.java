@@ -31,7 +31,19 @@ public class ReceivableSettlement extends CommonEntity {
     // 开票项目名称
     private String billName;
     // 结算主体
-    private ReceivableSettlementAgent agent;
+//    private ReceivableSettlementAgent agent;
+    // 结算主体id
+    private String receivableSettlementId;
+    // 结算主体名称
+    private String receivableSettlementName;
+    // 结算主体类型
+    private Integer receivableSettlementType;
+    // 结算费率
+    private BigDecimal receivableSettlementFeeRate;
+    // 结算税率
+    private BigDecimal receivableSettlementTaxRate;
+    // 结算主体是否含税结算
+    private Boolean receivableSettlementIsIncludeTax;
     // 不含税保费
     private Long excludeTaxPremium;
     // 含税手续费

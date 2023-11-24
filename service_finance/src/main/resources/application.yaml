@@ -1,9 +1,11 @@
 
 spring:
+  application:
+    name: finance
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password:
+    password: 123456
     url: jdbc:mysql://127.0.0.1:3306/finance
   # rabbitmq消息队列配置
   rabbitmq:
@@ -31,6 +33,10 @@ spring:
     #支持消息的确认与返回
     template:
       mandatory: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
 
 
 mybatis-plus:

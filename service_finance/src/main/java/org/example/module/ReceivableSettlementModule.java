@@ -43,6 +43,7 @@ public class ReceivableSettlementModule extends SettlementModule {
      * 添加应收
      */
     public  void addReceivableSettlementByPolicy(PolicyDto policyDto){
+        log.info("【开始添加保单应收信息】");
         int saleType = policyDto.getSaleType();
         SaleTypeEnum saleTypeEnum = SaleTypeEnum.of(saleType);
         switch (saleTypeEnum){

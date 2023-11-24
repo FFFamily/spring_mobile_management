@@ -41,6 +41,7 @@ public class PaySettlementModule extends SettlementModule {
      * 添加应付
      */
     public  void addPaySettlementByPolicy(PolicyDto policyDto){
+        log.info("【开始添加保单应付信息】");
         int saleType = policyDto.getSaleType();
         SaleTypeEnum saleTypeEnum = SaleTypeEnum.of(saleType);
         switch (saleTypeEnum){

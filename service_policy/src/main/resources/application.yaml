@@ -1,6 +1,8 @@
 server:
   port: 8081
 spring:
+  application:
+    name: policy
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
@@ -11,6 +13,11 @@ spring:
     username: guest
     port: 5672
     addresses: 127.0.0.1
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

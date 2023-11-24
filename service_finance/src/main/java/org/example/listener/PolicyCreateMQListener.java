@@ -28,7 +28,7 @@ public class PolicyCreateMQListener {
             receivableSettlementModule.addReceivableSettlementByPolicy(policyDto);
             paySettlementModule.addPaySettlementByPolicy(policyDto);
         }catch (Exception e){
-            log.error("保单生成应收应付记录出现错误，正在删除相关记录");
+            log.error("保单生成应收应付记录出现错误，正在删除相关记录: ",e);
         }
     }
 }
