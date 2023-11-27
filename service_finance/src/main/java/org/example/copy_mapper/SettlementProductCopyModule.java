@@ -1,13 +1,13 @@
 package org.example.copy_mapper;
 
-import org.example.entity.SettlementProduct;
+import org.example.entity.settlement_product.ProductSettlementAgent;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface SettlementProductCopyModule {
 
-    SettlementProductCopyModule INSTANCE = Mappers.getMapper( SettlementProductCopyModule.class);
+    SettlementProductCopyModule INSTANCE = Mappers.getMapper(SettlementProductCopyModule.class);
 
-    SettlementProduct.ProductSettlementAgent convert(Object user);
+    ProductSettlementAgent convert(Object user);
 }

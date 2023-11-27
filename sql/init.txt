@@ -1,0 +1,93 @@
+create database finance;
+use finance;
+
+-- auto Generated on 2023-11-26
+-- DROP TABLE IF EXISTS receivable_settlement;
+CREATE TABLE receivable_settlement(
+	id VARCHAR (50) NOT NULL COMMENT 'id',
+	updated_at BIGINT (15) COMMENT '更新时间',
+	`status` INT (11) COMMENT '状态',
+	created_scene INT (11) COMMENT '创建场景',
+	`type` INT (11) COMMENT '应收类型',
+	policy_type INT (11) COMMENT '保单类型',
+	policy_id VARCHAR (50) COMMENT '保单id',
+	policy_no VARCHAR (50) COMMENT '保单号',
+	endorsement_id VARCHAR (50) COMMENT '批单id',
+	endorsement_no VARCHAR (50) COMMENT '批单号',
+	bill_id VARCHAR (50) COMMENT '开票项目id',
+	bill_name VARCHAR (50) COMMENT '开票项目名称',
+	agent_id VARCHAR (50) COMMENT '结算主体',
+	agent_name VARCHAR (50) COMMENT '结算主体名称',
+	agent_type INT (11) COMMENT '结算主体类型',
+	agent_fee_rate DECIMAL (13,4) COMMENT '结算费率',
+	agent_tax_rate DECIMAL (13,4) COMMENT '结算税率',
+	agent_is_include_tax TINYINT (3) COMMENT '结算主体是否含税结算',
+	exclude_tax_premium BIGINT (15) COMMENT '不含税保费',
+	fee BIGINT (15) COMMENT '含税手续费',
+	fee_rate DECIMAL (13,4) COMMENT '手续费率',
+	fee_money BIGINT (15) COMMENT '手续费',
+	exclude_tax_fee BIGINT (15) COMMENT '不含税手续费',
+	enabled TINYINT (3) COMMENT '是否开启',
+	enabled_at BIGINT (15) COMMENT '开启时间',
+	created_at BIGINT (15) COMMENT '创建时间',
+	personnel_id VARCHAR (50) COMMENT '业务员id',
+	org_id VARCHAR (50) COMMENT '组织id',
+	premium BIGINT (15) COMMENT '保费',
+	is_include_tax TINYINT (3) COMMENT '是否含税结算',
+	insurance_id VARCHAR (50) COMMENT '险种id',
+	period_index BIGINT (15) COMMENT '期数',
+	tax_rate DECIMAL (13,4) COMMENT '税率',
+	tax_money BIGINT (15) COMMENT '税金',
+	settle_at BIGINT (15) COMMENT '结算日期',
+	insured_at BIGINT (15) COMMENT '承保时间',
+	interface_field_id VARCHAR (50) COMMENT '分项保费Id',
+	interface_field_name VARCHAR (50) COMMENT '分项保费名称',
+	include_tax_settle_money BIGINT (15) COMMENT '最终结算金额',
+	PRIMARY KEY (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT 'receivable_settlement';
+
+drop table settlement_agent_info;
+CREATE TABLE settlement_agent_info(
+	id VARCHAR (50) NOT NULL COMMENT 'id',
+	agent_id varchar(50) ,
+	created_at BIGINT (15) COMMENT '创建时间',
+	updated_at BIGINT (15) COMMENT '更新时间',
+	fee_rate DECIMAL (13,4) COMMENT '结算费率',
+	tax_rate DECIMAL (13,4) COMMENT '结算税率',
+	is_include_tax TINYINT (3) COMMENT '结算主体是否含税结算',
+	`from` BIGINT (15) COMMENT '生效起期',
+	`end` BIGINT (15) COMMENT '生效止期',
+	bill_id VARCHAR (50) COMMENT '开票项目',
+	PRIMARY KEY (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT 'settlement_agent_info';
+
+-- auto Generated on 2023-11-26
+-- DROP TABLE IF EXISTS settlement_agent;
+CREATE TABLE settlement_agent(
+	id VARCHAR (50) NOT NULL COMMENT 'id',
+	created_at BIGINT (15) COMMENT '创建时间',
+	updated_at BIGINT (15) COMMENT '更新时间',
+	`name` VARCHAR (50) COMMENT '结算主体名称',
+	`type` INT (11) COMMENT '结算主体类型',
+	org_id VARCHAR (50) COMMENT '机构',
+	PRIMARY KEY (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT 'settlement_agent';
+
+-- auto Generated on 2023-11-26
+-- DROP TABLE IF EXISTS settlement_product;
+CREATE TABLE settlement_product(
+	id VARCHAR (50) NOT NULL COMMENT 'id',
+	created_at BIGINT (15) COMMENT '创建时间',
+	updated_at BIGINT (15) COMMENT '更新时间',
+	insurance_id VARCHAR (50) COMMENT '险种Id',
+	bill_id VARCHAR (50) COMMENT '开票项目Id',
+	org_id VARCHAR (50) COMMENT '机构',
+	PRIMARY KEY (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT 'settlement_product';
+
+create table product_to_agent(
+    id varchar(50) primary key ,
+    product_id varchar(50),
+    agent_id varchar(50)
+);
+

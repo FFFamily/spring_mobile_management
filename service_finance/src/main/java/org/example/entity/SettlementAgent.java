@@ -8,7 +8,7 @@ import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SettlementAgent extends CommonEntity{
+public class SettlementAgent extends CommonEntity {
     // 结算主体名称
     private String name;
     // 结算主体类型
@@ -19,7 +19,9 @@ public class SettlementAgent extends CommonEntity{
     private List<SettlementAgentInfo> info;
 
     @Data
-    public static class SettlementAgentInfo{
+    public static class SettlementAgentInfo extends CommonEntity {
+        // 结算主体id
+        private String agentId;
         // 结算费率
         private BigDecimal feeRate;
         // 结算税率

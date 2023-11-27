@@ -40,7 +40,7 @@ public class CalculateModule {
         Boolean isIncludeTax = receivableSettlement.getIsIncludeTax();
         BigDecimal feeRate = receivableSettlement.getFeeRate();
         BigDecimal taxRate = receivableSettlement.getTaxRate();
-        ReceivableSettlementAgent agent = receivableSettlement.getAgent();
+        BigDecimal agentTaxRate = receivableSettlement.getAgentTaxRate();
         // 含税保费
         Long premium = receivableSettlement.getPremium();
         // 不含税保费
@@ -50,7 +50,7 @@ public class CalculateModule {
         // 手续费
         Long fee = getFee(isIncludeTax, premium, feeRate, excludeTaxPremium);
         // 不含税手续费
-        Long excludeTaxFee = agent != null ? getExcludeTaxFee(fee, agent.getTaxRate()) : null;
+        Long excludeTaxFee = receivableSettlement.getAgentId() != null ? getExcludeTaxFee(fee, agentTaxRate) : null;
         // 手续费税金
         Long feeMoney = getFeeMoney(fee, excludeTaxFee);
         return getAllResult(receivableSettlement, premium, taxMoney, excludeTaxPremium, fee, excludeTaxFee, feeMoney);
@@ -58,7 +58,7 @@ public class CalculateModule {
 
     public static CalculateResult getAllResult(ReceivableSettlement receivableSettlement, Long premium, Long taxMoney, Long excludeTaxPremium, Long fee, Long excludeTaxFee, Long feeMoney) {
         CalculateResult calculateResult = new CalculateResult();
-        ReceivableSettlementAgent settlementAgent = receivableSettlement.getAgent();
+        BigDecimal agentTaxRate = receivableSettlement.getAgentTaxRate();
         Boolean isIncludeTax = receivableSettlement.getIsIncludeTax();
         BigDecimal feeRate = receivableSettlement.getFeeRate();
         BigDecimal taxRate = receivableSettlement.getTaxRate();
@@ -70,9 +70,9 @@ public class CalculateModule {
         taxMoney = taxMoney == null ? getTaxMoney(premium, excludeTaxPremium) : taxMoney;
         // 手续费
         fee = fee == null ? getFee(isIncludeTax, premium, feeRate, excludeTaxPremium) : fee;
-        if (!check(settlementAgent)) {
+        if (!check(receivableSettlement.getAgentId())) {
             // 不含税手续费
-            excludeTaxFee = excludeTaxFee == null ? getExcludeTaxFee(fee, settlementAgent.getTaxRate()) : excludeTaxFee;
+            excludeTaxFee = excludeTaxFee == null ? getExcludeTaxFee(fee, agentTaxRate) : excludeTaxFee;
         } else {
             excludeTaxFee = null;
         }
@@ -95,9 +95,21 @@ public class CalculateModule {
         if (excludeTaxPremium != null) {
             calculateResult.setExcludeTaxPremium(excludeTaxPremium);
         }
-        if (!check(settlementAgent)) {
+        if (!check(receivableSettlement.getAgentId())) {
             // 最后结果
-            calculateResult.setIncludeTaxSettleMoney(calculate(premium, excludeTaxPremium, fee, excludeTaxFee, settlementAgent.getType(), isIncludeTax, settlementAgent.getIsIncludeTax(), feeRate, settlementAgent.getFeeRate()));
+            calculateResult.setIncludeTaxSettleMoney(
+                    calculate(
+                            premium,
+                            excludeTaxPremium,
+                            fee,
+                            excludeTaxFee,
+                            receivableSettlement.getAgentType(),
+                            isIncludeTax,
+                            receivableSettlement.getAgentIsIncludeTax(),
+                            feeRate,
+                            receivableSettlement.getAgentFeeRate()
+                    )
+            );
         }
         return calculateResult;
     }

@@ -5,6 +5,4 @@ import lombok.Data;
 @Data
 public class Bill extends CommonEntity {
     private String name;
-    private Long createdAt;
-
 }

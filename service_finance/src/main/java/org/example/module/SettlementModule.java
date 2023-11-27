@@ -3,6 +3,7 @@ package org.example.module;
 import lombok.extern.slf4j.Slf4j;
 import org.example.core.policy.PolicyDto;
 import org.example.feign.AccountFeign;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.math.RoundingMode;
  * 通用方法封装
  */
 @Slf4j
+@Component
 public abstract class SettlementModule {
     @Resource
     private AccountFeign accountFeign;

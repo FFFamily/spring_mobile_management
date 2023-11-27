@@ -6,14 +6,9 @@ import org.example.entity.CommonException;
 import org.example.entity.PaySettlement;
 import org.example.enums.FinanceRecordOriginTypeEnum;
 import org.example.enums.PolicyTypeEnum;
-import org.example.enums.SaleTypeEnum;
 import org.example.enums.SettlementModeEnum;
-import org.example.module.process.Activity;
-import org.example.module.process.InviterAward;
-import org.example.module.process.Promotion;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -23,12 +18,6 @@ import java.math.RoundingMode;
 @Component
 @Slf4j
 public class PaySettlementModule extends SettlementModule {
-    @Resource
-    private Promotion promotion;
-    @Resource
-    private Activity activity;
-    @Resource
-    private InviterAward inviterAward;
 
     public static PaySettlement createPaySettlement(
             PolicyDto policyDto,
@@ -45,10 +34,10 @@ public class PaySettlementModule extends SettlementModule {
         paySettlement.setPremium(premium);
         paySettlement.setCreatedScene(financeRecordOriginTypeEnum.getCode());
         paySettlement.setPayRate(payRate);
-        paySettlement.setIncludeTaxPayMoney(CalculateModule.getPaySettlementResult(premium,payRate));
-        if (endorsementDto != null){
+        paySettlement.setIncludeTaxPayMoney(CalculateModule.getPaySettlementResult(premium, payRate));
+        if (endorsementDto != null) {
             paySettlement.setPolicyType(PolicyTypeEnum.ENDORSEMENT.getCode());
-        }else {
+        } else {
             paySettlement.setPolicyType(PolicyTypeEnum.POLICY.getCode());
             paySettlement.setPolicyId(policyDto.getId());
             paySettlement.setPolicyNo(policyDto.getNo());
@@ -61,47 +50,17 @@ public class PaySettlementModule extends SettlementModule {
     }
 
     /**
-     * 添加应付
-     */
-    public  void addPaySettlementByPolicy(PolicyDto policyDto){
-        log.info("【开始添加保单应付信息】");
-        int saleType = policyDto.getSaleType();
-        SaleTypeEnum saleTypeEnum = SaleTypeEnum.of(saleType);
-        switch (saleTypeEnum){
-            case ONLINE -> online(policyDto);
-            case OFFLINE -> offline();
-            default -> throw new CommonException("【应收应付】不支持的出单类型");
-        }
-    }
-
-    /**
-     * 线上
-     */
-    private  void online(PolicyDto policyDto){
-        String key = "income_record_add_" + policyDto.getAccountId();
-        synchronized (key){
-            log.info("【Online】添加保单对应的系统出单类型应付数据");
-            promotion.AddPaySettlementByPromotion(policyDto, FinanceRecordOriginTypeEnum.SYSTEM,null);
-//            log.info("【Online】添加保单对应的邀请奖励类型应付数据");
-//            inviterAward.AddPaySettlementByInviterAward(policy,FinanceRecordOriginTypeEnum.SYSTEM);
-//            log.info("【Online】添加保单对应的活动奖励类型应付数据");
-//            activity.AddPaySettlementByActivity(policy,FinanceRecordOriginTypeEnum.SYSTEM);
-        }
-    }
-
-    /**
      * 线下
      */
-    private static void offline(){
+    private static void offline() {
 
     }
-
 
     /**
      * 计算其他信息：收入管理相关
      *
      * @param isCertificated           是否认证
-     * @param premiumMoney                  保费
+     * @param premiumMoney             保费
      * @param orgToAgentRate           机构对业务员的佣金比例
      * @param superiorToAgentOrgRate   上层拥挤比例
      * @param finalSettlementToOrgRate 最终结算比例
@@ -115,9 +74,8 @@ public class PaySettlementModule extends SettlementModule {
                 .divide(BigDecimal.valueOf(100), 0, RoundingMode.HALF_UP);
         var finalSettlementOrgPromotionMoney = premium.multiply(finalSettlementToOrgRate)
                 .divide(BigDecimal.valueOf(100), 0, RoundingMode.HALF_UP);
-        return new BigDecimal[]{ promotionMoney, orgPromotionMoney, finalSettlementOrgPromotionMoney };
+        return new BigDecimal[]{promotionMoney, orgPromotionMoney, finalSettlementOrgPromotionMoney};
     }
-
 
     /**
      * 获取应付佣金率
@@ -140,4 +98,5 @@ public class PaySettlementModule extends SettlementModule {
         }
         return payRate;
     }
+
 }

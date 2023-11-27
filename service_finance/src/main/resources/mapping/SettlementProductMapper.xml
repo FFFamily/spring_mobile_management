@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.mapper.SettlementProductMapper">
+    <resultMap id="settlementProduct" type="org.example.entity.settlement_product.SettlementProduct">
+        <result column="id" property="id"/>
+        <result column="insurance_id" property="insuranceId"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="org_id" property="orgId"/>
+        <collection property="settlementAgents"
+                    ofType="org.example.entity.settlement_product.ProductSettlementAgent">
+            <result column="agent_id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="type" property="type"/>
+            <result column="rate" property="rate"/>
+        </collection>
+    </resultMap>
+    <select id="findAllByInsuranceId" resultMap="settlementProduct">
+        select
+        p.*,
+        a.id as agent_id,
+        a.name,
+        a.type,
+        temp.rate as rate
+        from finance.settlement_product p
+        left join finance.product_to_agent temp
+        on p.id = temp.product_id
+        left join finance.settlement_agent a
+        on temp.id = a.id
+        where insurance_id = #{insuranceId}
+    </select>
+</mapper>

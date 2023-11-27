@@ -1,14 +1,13 @@
 package org.example.entity.receivable_settlement;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.example.entity.CommonEntity;
-import org.example.entity.SettlementAgent;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = false)
+@Data
 public class ReceivableSettlement extends CommonEntity {
     // 状态
     private Integer status;
@@ -33,17 +32,17 @@ public class ReceivableSettlement extends CommonEntity {
     // 结算主体
 //    private ReceivableSettlementAgent agent;
     // 结算主体id
-    private String receivableSettlementId;
+    private String agentId;
     // 结算主体名称
-    private String receivableSettlementName;
+    private String agentName;
     // 结算主体类型
-    private Integer receivableSettlementType;
+    private Integer agentType;
     // 结算费率
-    private BigDecimal receivableSettlementFeeRate;
+    private BigDecimal agentFeeRate;
     // 结算税率
-    private BigDecimal receivableSettlementTaxRate;
+    private BigDecimal agentTaxRate;
     // 结算主体是否含税结算
-    private Boolean receivableSettlementIsIncludeTax;
+    private Boolean agentIsIncludeTax;
     // 不含税保费
     private Long excludeTaxPremium;
     // 含税手续费
