@@ -14,6 +14,14 @@ import java.util.Objects;
 @Slf4j
 public class CalculateModule {
 
+    public static Long getPaySettlementResult(Long premium,BigDecimal payRate){
+        return SettlementModule
+                .raleToNum(payRate)
+                .multiply(BigDecimal.valueOf(premium))
+                .setScale(0,RoundingMode.HALF_UP)
+                .longValue();
+    }
+
     public static void getAndSetAllResult(ReceivableSettlement receivableSettlement) {
         CalculateResult calcResult = getAllResult(receivableSettlement);
         log.info("结算 ,{}", calcResult);

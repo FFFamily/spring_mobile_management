@@ -26,6 +26,8 @@ public class Promotion {
     private HistoryModule historyModule;
     @Resource
     private SettlementAgentModule settlementAgentModule;
+    @Resource
+    private SettlementModule settlementModule;
 
     /**
      *
@@ -96,21 +98,18 @@ public class Promotion {
     }
 
     public void AddPaySettlementByPromotion(PolicyDto policyDto, FinanceRecordOriginTypeEnum financeRecordOriginTypeEnum, Integer finalSettlementSettlementMode) {
-        // TODO 远程调用 Account
-        boolean isCertificated = false;
+        boolean isCertificated = settlementModule.checkIsCertificated(policyDto.getAccountId());
         if (isCertificated){
             log.info("该用户 {} 没有认证，该单的推广费为0", policyDto.getAccountId());
         }
-        // TODO 判断是否为线下录入险种
         List<PromotionItemDto> promotions = policyDto.getPromotions();
         for (ListIterator<PromotionItemDto> it = promotions.listIterator(); it.hasNext(); ) {
             // 期数
             int periodIndex = it.previousIndex() + 1;
             PromotionItemDto item = it.next();
-//            HashMap<String, PromotionItem> promotion = Optional.ofNullable(it.next().getPromotion()).orElse(new HashMap<>());
-//            for (Map.Entry<String, PromotionItem> item : promotion.entrySet()) {
                 String interfaceFieldId = item.getId();
-
+                // TODO 分项保费名称
+                String interfaceFieldName = "TODO";
                 // 保费
                 Long premium = item.getPremium();
                 if (SettlementModule.checkPremium(premium)){
@@ -128,8 +127,6 @@ public class Promotion {
                 BigDecimal finalSettlementOrgPromotionMoney = calculated[2];
                 // 是否已经过了续期时间，一般新单不会，但是线下单录入可能会
                 var reachRenewal = SettlementModule.checkReachRenewal(policyDto, periodIndex);
-                // TODO 分项保费名称
-                String interfaceFieldName = "TODO";
                 BigDecimal payRate = PaySettlementModule.getPayRate(finalSettlementSettlementMode, item.getFinalSettlementToOrg(), item.getOrgToAccount());
                 PaySettlement paySettlement =  PaySettlementModule.createPaySettlement(
                         policyDto,
@@ -149,8 +146,6 @@ public class Promotion {
                 log.info("【Promotion】准备添加应付记录 {}",paySettlement);
                 // 创建历史记录
                 HistoryModule.initPaymentSettlementHistory(paySettlement, policyDto);
-//            }
-
         }
 
     }

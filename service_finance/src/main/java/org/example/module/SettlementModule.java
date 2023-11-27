@@ -2,7 +2,9 @@ package org.example.module;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.core.policy.PolicyDto;
+import org.example.feign.AccountFeign;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -11,6 +13,8 @@ import java.math.RoundingMode;
  */
 @Slf4j
 public abstract class SettlementModule {
+    @Resource
+    private AccountFeign accountFeign;
     /**
      * 判断保费是否为0
      *
@@ -23,6 +27,10 @@ public abstract class SettlementModule {
         }
         // 此处保费为null也会放行，后续使用保费会产生空指针为正常情况
         return false;
+    }
+
+    public  boolean checkIsCertificated(String accountId){
+       return accountFeign.findAccountByAccountId(accountId).getIsCertificated();
     }
 
 

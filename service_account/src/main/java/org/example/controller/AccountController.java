@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.entity.Account;
 import org.example.entity.CommonResponse;
 import org.example.service.AccountService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -25,4 +22,12 @@ public class AccountController {
         accountService.addAccount(account);
         return CommonResponse.success();
     }
+
+    @GetMapping("/findById/{accountId}")
+    public CommonResponse<Account> findAccountById(@PathVariable String accountId){
+        return CommonResponse.success(accountService.findAccountById(accountId));
+    }
+
+
+
 }

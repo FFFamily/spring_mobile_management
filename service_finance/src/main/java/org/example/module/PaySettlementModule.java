@@ -5,6 +5,7 @@ import org.example.core.policy.PolicyDto;
 import org.example.entity.CommonException;
 import org.example.entity.PaySettlement;
 import org.example.enums.FinanceRecordOriginTypeEnum;
+import org.example.enums.PolicyTypeEnum;
 import org.example.enums.SaleTypeEnum;
 import org.example.enums.SettlementModeEnum;
 import org.example.module.process.Activity;
@@ -29,7 +30,29 @@ public class PaySettlementModule extends SettlementModule {
     @Resource
     private InviterAward inviterAward;
 
-    public static PaySettlement createPaySettlement(PolicyDto policyDto, Object o, int periodIndex, String interfaceFieldId, String interfaceFieldName, Long premium, Integer finalSettlementSettlementMode, BigDecimal payRate, boolean reachRenewal, Object o1, FinanceRecordOriginTypeEnum financeRecordOriginTypeEnum) {
+    public static PaySettlement createPaySettlement(
+            PolicyDto policyDto,
+            Object endorsementDto, // TODO 批单
+            int periodIndex,
+            String interfaceFieldId,
+            String interfaceFieldName,
+            Long premium,
+            Integer finalSettlementSettlementMode,
+            BigDecimal payRate, boolean reachRenewal, Object o1,
+            FinanceRecordOriginTypeEnum financeRecordOriginTypeEnum) {
+        PaySettlement paySettlement = new PaySettlement();
+        paySettlement.setPeriodIndex(periodIndex);
+        paySettlement.setPremium(premium);
+        paySettlement.setCreatedScene(financeRecordOriginTypeEnum.getCode());
+        paySettlement.setPayRate(payRate);
+        paySettlement.setIncludeTaxPayMoney(CalculateModule.getPaySettlementResult(premium,payRate));
+        if (endorsementDto != null){
+            paySettlement.setPolicyType(PolicyTypeEnum.ENDORSEMENT.getCode());
+        }else {
+            paySettlement.setPolicyType(PolicyTypeEnum.POLICY.getCode());
+            paySettlement.setPolicyId(policyDto.getId());
+            paySettlement.setPolicyNo(policyDto.getNo());
+        }
         return new PaySettlement();
     }
 

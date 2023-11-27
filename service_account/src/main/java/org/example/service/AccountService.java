@@ -21,4 +21,9 @@ public class AccountService {
         log.info("【创建业务员】");
         accountMapper.insert(account);
     }
+
+    public Account findAccountById(String accountId) {
+        log.info("【查询业务员】{}",accountId);
+        return  accountMapper.selectById(accountId);
+    }
 }
