@@ -5,7 +5,7 @@ import org.example.core.policy.PolicyDto;
 import org.example.core.policy.PromotionItemDto;
 import org.example.entity.CommonEntity;
 import org.example.entity.PaySettlement;
-import org.example.entity.SettlementAgent;
+import org.example.entity.settlement_agent.SettlementAgent;
 import org.example.entity.receivable_settlement.ReceivableSettlement;
 import org.example.entity.settlement_product.ProductSettlementAgent;
 import org.example.entity.settlement_product.SettlementProduct;
@@ -46,8 +46,6 @@ public class Promotion {
             // 期数
             int periodIndex = it.previousIndex() + 1;
             PromotionItemDto item = it.next();
-//            HashMap<String, PromotionItem> promotion = Optional.ofNullable(commissionRate.getPromotion()).orElse(new HashMap<>());
-//            for (Map.Entry<String, PromotionItem> item : promotion.entrySet()) {
             // 分项保费id
             String interfaceFieldId = item.getId();
             // TODO 分项保费名称
@@ -68,7 +66,16 @@ public class Promotion {
                 BigDecimal sum = BigDecimal.ZERO;
                 for (int i = 0; i < settlementProduct.getSettlementAgents().size(); i++) {
                     ProductSettlementAgent settlementAgent = settlementProduct.getSettlementAgents().get(i);
-                    ReceivableSettlement receivableSettlement = ReceivableSettlementModule.createReceivableSettlement();
+                    ReceivableSettlement receivableSettlement =
+                            ReceivableSettlementModule.createReceivableSettlement(
+                                    policyDto,
+                                    null,
+                                    periodIndex,
+                                    interfaceFieldId,
+                                    interfaceFieldName,
+                                    premium,
+                                    type
+                            );
                     if (i == settlementProduct.getSettlementAgents().size() - 1) {
                         // 最后一个拆分需要用减法，以达到 100%的比例
                         receivableSettlement.setFeeRate(insuranceCompanyToSystem.subtract(sum));
@@ -91,7 +98,7 @@ public class Promotion {
             } else {
                 // 说明没有配置结算产品，只会生成一条结算记录
                 log.info("该险种：{} 没有配置结算主体", policyDto.getInsuranceId());
-                ReceivableSettlement receivableSettlement = ReceivableSettlementModule.createReceivableSettlement();
+                ReceivableSettlement receivableSettlement = ReceivableSettlementModule.createReceivableSettlement(policyDto,null, periodIndex, interfaceFieldId, interfaceFieldName, premium, type);
                 // 进行计算
                 CalculateModule.getAndSetAllResult(receivableSettlement);
                 log.info("【Promotion】准备添加应收记录：{}", receivableSettlement);
@@ -99,7 +106,6 @@ public class Promotion {
                 // 构建历史记录
                 historyModule.initHistory(Collections.singletonList(receivableSettlement), policyDto);
             }
-//            }
         }
     }
 

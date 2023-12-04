@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.entity.SettlementAgent;
+import org.example.entity.settlement_agent.SettlementAgent;
 
 @Getter
 @Setter

@@ -70,7 +70,7 @@ public class ReceivableSettlement extends CommonEntity {
     // 险种id
     private String insuranceId;
     // 期数
-    private Long periodIndex;
+    private Integer periodIndex;
     // 税率
     private BigDecimal taxRate;
     // 税金

@@ -21,12 +21,12 @@ public class FinanceController {
 
     @GetMapping("/test")
     @ResponseBody
-    public CommonResponse test(){
+    public CommonResponse<Void> test(){
         System.out.println("接收到测试请求");
         HashMap<String, String> map = new HashMap<>();
         map.put("name","tutu");
         rabbitTemplate.convertAndSend("TestDirectExchange","TestDirectRouting",map);
-        return CommonResponse.success(null);
+        return CommonResponse.success();
     }
 
 }

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.core.policy.PolicyDto;
 import org.example.entity.Bill;
 import org.example.entity.CommonException;
-import org.example.entity.SettlementAgent;
+import org.example.entity.settlement_agent.SettlementAgent;
 import org.example.entity.receivable_settlement.ReceivableSettlement;
 import org.example.enums.SettlementAgentTypeEnum;
 import org.example.enums.policy.PolicyTypeEnum;

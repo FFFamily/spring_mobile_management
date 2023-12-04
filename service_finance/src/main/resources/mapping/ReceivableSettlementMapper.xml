@@ -5,7 +5,23 @@
         insert into  receivable_settlement values
         <foreach collection="list" item="item" separator=",">
             (
-             #{item.id}
+                #{item.id},
+             #{item.type},
+                #{item.policyId},
+                #{item.policyNo},
+                #{item.policyType},
+                #{item.endorsementId},
+            #{item.endorsementNo},
+             #{item.agentId},
+            #{item.agentName},
+            #{item.agentType},
+            #{item.agentId},
+            #{item.agentFeeRate},
+            #{item.agentTaxRate},
+            #{item.agentIsIncludeTax},
+            #{item.interfaceFieldId},
+            #{item.interfaceFieldName},
+            #{item.excludeTaxPremium},
             )
         </foreach>
     </insert>

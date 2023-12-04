@@ -1,8 +1,8 @@
-create database finance;
+# create database finance;
 use finance;
 
 -- auto Generated on 2023-11-26
--- DROP TABLE IF EXISTS receivable_settlement;
+DROP TABLE IF EXISTS receivable_settlement;
 CREATE TABLE receivable_settlement(
 	id VARCHAR (50) NOT NULL COMMENT 'id',
 	updated_at BIGINT (15) COMMENT '更新时间',
@@ -46,7 +46,7 @@ CREATE TABLE receivable_settlement(
 	PRIMARY KEY (id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT 'receivable_settlement';
 
-drop table settlement_agent_info;
+drop table IF EXISTS settlement_agent_info;
 CREATE TABLE settlement_agent_info(
 	id VARCHAR (50) NOT NULL COMMENT 'id',
 	agent_id varchar(50) ,
@@ -62,7 +62,7 @@ CREATE TABLE settlement_agent_info(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT 'settlement_agent_info';
 
 -- auto Generated on 2023-11-26
--- DROP TABLE IF EXISTS settlement_agent;
+DROP TABLE IF EXISTS settlement_agent;
 CREATE TABLE settlement_agent(
 	id VARCHAR (50) NOT NULL COMMENT 'id',
 	created_at BIGINT (15) COMMENT '创建时间',
@@ -85,9 +85,11 @@ CREATE TABLE settlement_product(
 	PRIMARY KEY (id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT 'settlement_product';
 
+-- DROP TABLE IF EXISTS product_to_agent;
 create table product_to_agent(
     id varchar(50) primary key ,
     product_id varchar(50),
-    agent_id varchar(50)
+    agent_id varchar(50),
+    rate float
 );
 
