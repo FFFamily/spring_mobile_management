@@ -13,8 +13,6 @@ public class SettlementProduct extends CommonEntity {
     private String insuranceId;
     // 开票项目Id
     private String billId;
-    // 结算主体
-    private List<ProductSettlementAgent> settlementAgents;
     // 机构
     private String orgId;
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.mapper.SettlementAgentInfoMapper">
+    <resultMap id="settlementProduct" type="org.example.entity.settlement_product.SettlementProduct">
+        <result column="id" property="id"/>
+        <result column="insurance_id" property="insuranceId"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="org_id" property="orgId"/>
+        <collection property="settlementAgents"
+                    ofType="org.example.entity.settlement_product.ProductSettlementAgent">
+            <result column="agent_id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="type" property="type"/>
+            <result column="rate" property="rate"/>
+        </collection>
+    </resultMap>
+    <insert id="insertList">
+        insert into   values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id},
+            #{item.type},
+            #{item.policyId},
+            #{item.policyNo},
+            #{item.policyType},
+            #{item.endorsementId},
+            #{item.endorsementNo},
+            #{item.agentId},
+            #{item.agentName},
+            #{item.agentType},
+            #{item.agentId},
+            #{item.agentFeeRate},
+            #{item.agentTaxRate},
+            #{item.agentIsIncludeTax},
+            #{item.interfaceFieldId},
+            #{item.interfaceFieldName},
+            #{item.excludeTaxPremium},
+            )
+        </foreach>
+    </insert>
+</mapper>

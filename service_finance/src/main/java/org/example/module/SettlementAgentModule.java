@@ -7,6 +7,7 @@ import org.example.entity.Bill;
 import org.example.entity.CommonException;
 import org.example.entity.settlement_agent.SettlementAgent;
 import org.example.entity.receivable_settlement.ReceivableSettlement;
+import org.example.entity.settlement_agent.SettlementAgentInfo;
 import org.example.enums.SettlementAgentTypeEnum;
 import org.example.enums.policy.PolicyTypeEnum;
 import org.example.feign.PolicyFeign;
@@ -32,7 +33,7 @@ public class SettlementAgentModule {
     /**
      * 适用的范围：合并、结算主体拆分、共保拆分、创建应收信息
      */
-    public static Optional<SettlementAgent.SettlementAgentInfo> getAgentCurrentSettlementInfo(SettlementAgent agent, Long createdAt) {
+    public static Optional<SettlementAgentInfo> getAgentCurrentSettlementInfo(SettlementAgent agent, Long createdAt) {
         if (agent == null || agent.getInfo() == null) {
             throw new CommonException("结算主体中的必要信息不能为空 agent: " + agent);
         }
@@ -66,7 +67,7 @@ public class SettlementAgentModule {
             log.error("结算主体赋值错误，部分参数为null");
             return;
         }
-        Optional<SettlementAgent.SettlementAgentInfo> optional;
+        Optional<SettlementAgentInfo> optional;
         Long insuredAt = receivableSettlement.getInsuredAt();
         if (insuredAt != null) {
             optional = getAgentCurrentSettlementInfo(agent, receivableSettlement.getInsuredAt());
@@ -77,7 +78,7 @@ public class SettlementAgentModule {
             optional = getAgentInfoByEndorsementId(agent, receivableSettlement.getEndorsementId());
         }
         if (optional.isPresent()) {
-            SettlementAgent.SettlementAgentInfo infoItem = optional.get();
+            SettlementAgentInfo infoItem = optional.get();
             receivableSettlement.setAgentIsIncludeTax(infoItem.getIsIncludeTax());
             receivableSettlement.setAgentTaxRate(infoItem.getTaxRate());
             receivableSettlement.setAgentFeeRate(infoItem.getFeeRate());
@@ -100,14 +101,14 @@ public class SettlementAgentModule {
         receivableSettlement.setAgentType(agent.getType());
     }
 
-    private Optional<SettlementAgent.SettlementAgentInfo> getAgentInfoByEndorsementId(SettlementAgent settlementAgent, String endorsementId) {
+    private Optional<SettlementAgentInfo> getAgentInfoByEndorsementId(SettlementAgent settlementAgent, String endorsementId) {
         return Optional.empty();
     }
 
     /**
      * 判断保单是否匹配上对应的结算主体
      */
-    private Optional<SettlementAgent.SettlementAgentInfo> getAgentInfoByPolicyId(SettlementAgent settlementAgent, String policyId) {
+    private Optional<SettlementAgentInfo> getAgentInfoByPolicyId(SettlementAgent settlementAgent, String policyId) {
         PolicyDto policyDto = policyFeign.findPolicyByPolicyId(policyId);
         // 拿到承保时间
         Long insureAt = policyDto.getInsureAt();

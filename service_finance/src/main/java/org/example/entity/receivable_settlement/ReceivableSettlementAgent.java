@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.entity.settlement_agent.SettlementAgent;
+import org.example.entity.settlement_agent.SettlementAgentInfo;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReceivableSettlementAgent extends SettlementAgent.SettlementAgentInfo {
+public class ReceivableSettlementAgent extends SettlementAgentInfo {
     // 结算主体id
     private String id;
     // 结算主体名称

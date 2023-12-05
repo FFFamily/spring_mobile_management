@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.dto.SettlementAgentDto;
 import org.example.entity.CommonResponse;
 import org.example.entity.settlement_agent.SettlementAgent;
 import org.example.service.SettlementAgentService;
@@ -15,8 +16,9 @@ import javax.annotation.Resource;
 public class SettlementAgentController {
     @Resource
     private SettlementAgentService settlementAgentService;
+
     @PostMapping("/save")
-    public CommonResponse<Void> save(@RequestBody SettlementAgent settlementAgent){
+    public CommonResponse<Void> save(@RequestBody SettlementAgentDto settlementAgent){
         settlementAgentService.save(settlementAgent);
         return CommonResponse.success();
     }
