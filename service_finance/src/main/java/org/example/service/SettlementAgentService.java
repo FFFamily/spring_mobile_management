@@ -5,6 +5,7 @@ import org.example.dto.SettlementAgentDto;
 import org.example.entity.CommonException;
 import org.example.entity.settlement_agent.SettlementAgent;
 import org.example.entity.settlement_agent.SettlementAgentInfo;
+import org.example.mapper.SettlementAgentInfoMapper;
 import org.example.mapper.SettlementAgentMapper;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public class SettlementAgentService {
     @Resource
     private SettlementAgentMapper settlementAgentMapper;
+    @Resource
+    private SettlementAgentInfoMapper settlementAgentInfoMapper;
     /**
      * 创建结算主体
      */
@@ -31,7 +34,6 @@ public class SettlementAgentService {
         newAgent.setType(settlementAgent.getType());
         settlementAgentMapper.insert(newAgent);
         List<SettlementAgentInfo> info = settlementAgent.getInfo();
-
-
+        settlementAgentInfoMapper.insertList(info);
     }
 }

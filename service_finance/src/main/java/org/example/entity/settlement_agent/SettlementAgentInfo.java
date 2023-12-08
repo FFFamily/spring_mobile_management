@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = false)
 @Data
 public class SettlementAgentInfo extends CommonEntity {
+    // 对应结算主体id
     private String agentId;
     // 结算费率
     private BigDecimal feeRate;

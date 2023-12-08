@@ -3,6 +3,8 @@ package org.example.module.process;
 import lombok.extern.slf4j.Slf4j;
 import org.example.core.policy.PolicyDto;
 import org.example.core.policy.PromotionItemDto;
+import org.example.dto.SettlementAgentDto;
+import org.example.dto.SettlementProductDto;
 import org.example.entity.CommonEntity;
 import org.example.entity.PaySettlement;
 import org.example.entity.settlement_agent.SettlementAgent;
@@ -57,11 +59,11 @@ public class Promotion {
                 return;
             }
             // 是否已经过了续期时间，一般新单不会，但是线下单录入可能会（目前没有续期）
-            SettlementProduct settlementProduct = receivableSettlementModule.getSettlementProduct(policyDto, item);
+            SettlementProductDto settlementProduct = receivableSettlementModule.getSettlementProduct(policyDto, item);
             List<ReceivableSettlement> receivableSettlementList = new ArrayList<>();
             if (settlementProduct != null) {
                 // 查询对应的结算主体信息
-                HashMap<String, SettlementAgent> agentHashMap =
+                HashMap<String, SettlementAgentDto> agentHashMap =
                         settlementAgentModule.getAgentMapById(settlementProduct.getSettlementAgents().stream().map(CommonEntity::getId).toList());
                 BigDecimal sum = BigDecimal.ZERO;
                 for (int i = 0; i < settlementProduct.getSettlementAgents().size(); i++) {

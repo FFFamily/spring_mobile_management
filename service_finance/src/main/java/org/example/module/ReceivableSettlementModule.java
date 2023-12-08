@@ -5,6 +5,7 @@ import org.example.copy_mapper.SettlementProductCopyModule;
 import org.example.core.policy.EndorsementDto;
 import org.example.core.policy.PolicyDto;
 import org.example.core.policy.PromotionItemDto;
+import org.example.dto.SettlementProductDto;
 import org.example.entity.receivable_settlement.ReceivableSettlement;
 import org.example.entity.settlement_product.ProductSettlementAgent;
 import org.example.entity.settlement_product.SettlementProduct;
@@ -49,11 +50,11 @@ public class ReceivableSettlementModule {
         return receivableSettlement;
     }
 
-    public SettlementProduct getSettlementProduct(PolicyDto policyDto, PromotionItemDto promotionItemDto) {
+    public SettlementProductDto getSettlementProduct(PolicyDto policyDto, PromotionItemDto promotionItemDto) {
         if (promotionItemDto.getSettlementAgents() != null && !promotionItemDto.getSettlementAgents().isEmpty()) {
             List<ProductSettlementAgent> settlementAgents =
                     promotionItemDto.getSettlementAgents().stream().map(SettlementProductCopyModule.INSTANCE::convert).collect(Collectors.toList());
-            SettlementProduct settlementProduct = new SettlementProduct();
+            SettlementProductDto settlementProduct = new SettlementProductDto();
             settlementProduct.setSettlementAgents(settlementAgents);
             return settlementProduct;
         } else {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.mapper.SettlementProductMapper">
-    <resultMap id="settlementProduct" type="org.example.entity.settlement_product.SettlementProduct">
+    <resultMap id="settlementProduct" type="org.example.dto.SettlementProductDto">
         <result column="id" property="id"/>
         <result column="insurance_id" property="insuranceId"/>
         <result column="created_at" property="createdAt"/>
@@ -15,6 +15,7 @@
             <result column="rate" property="rate"/>
         </collection>
     </resultMap>
+
     <select id="findAllByInsuranceId" resultMap="settlementProduct">
         select
         p.*,

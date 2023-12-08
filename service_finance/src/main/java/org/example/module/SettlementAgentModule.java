@@ -3,6 +3,7 @@ package org.example.module;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.example.core.policy.PolicyDto;
+import org.example.dto.SettlementAgentDto;
 import org.example.entity.Bill;
 import org.example.entity.CommonException;
 import org.example.entity.settlement_agent.SettlementAgent;
@@ -33,7 +34,7 @@ public class SettlementAgentModule {
     /**
      * 适用的范围：合并、结算主体拆分、共保拆分、创建应收信息
      */
-    public static Optional<SettlementAgentInfo> getAgentCurrentSettlementInfo(SettlementAgent agent, Long createdAt) {
+    public static Optional<SettlementAgentInfo> getAgentCurrentSettlementInfo(SettlementAgentDto agent, Long createdAt) {
         if (agent == null || agent.getInfo() == null) {
             throw new CommonException("结算主体中的必要信息不能为空 agent: " + agent);
         }
@@ -43,14 +44,14 @@ public class SettlementAgentModule {
     /**
      * 根据结算主体id查询结算主体
      */
-    public List<SettlementAgent> getAgentsById(List<String> ids) {
-        return settlementAgentMapper.selectBatchIds(ids);
+    public List<SettlementAgentDto> getAgentsById(List<String> ids) {
+        return settlementAgentMapper.selectByIdList(ids);
     }
 
     /**
      * 根据结算主体id查询并转换为对应的map映射
      */
-    public HashMap<String, SettlementAgent> getAgentMapById(List<String> ids) {
+    public HashMap<String, SettlementAgentDto> getAgentMapById(List<String> ids) {
         return getAgentsById(ids)
                 .stream()
                 .reduce(new HashMap<>(), (prev, curr) -> {
@@ -62,7 +63,7 @@ public class SettlementAgentModule {
     /**
      * 给应收记录中的结算主体赋值
      */
-    public void setAgent(SettlementAgent agent, ReceivableSettlement receivableSettlement) {
+    public void setAgent(SettlementAgentDto agent, ReceivableSettlement receivableSettlement) {
         if (agent == null || receivableSettlement == null) {
             log.error("结算主体赋值错误，部分参数为null");
             return;
@@ -71,11 +72,12 @@ public class SettlementAgentModule {
         Long insuredAt = receivableSettlement.getInsuredAt();
         if (insuredAt != null) {
             optional = getAgentCurrentSettlementInfo(agent, receivableSettlement.getInsuredAt());
-        }
-        if (receivableSettlement.getPolicyType().equals(PolicyTypeEnum.POLICY.getCode())) {
-            optional = getAgentInfoByPolicyId(agent, receivableSettlement.getPolicyId());
-        } else {
-            optional = getAgentInfoByEndorsementId(agent, receivableSettlement.getEndorsementId());
+        }else {
+            if (receivableSettlement.getPolicyType().equals(PolicyTypeEnum.POLICY.getCode())) {
+                optional = getAgentInfoByPolicyId(agent, receivableSettlement.getPolicyId());
+            } else {
+                optional = getAgentInfoByEndorsementId(agent, receivableSettlement.getEndorsementId());
+            }
         }
         if (optional.isPresent()) {
             SettlementAgentInfo infoItem = optional.get();
@@ -101,14 +103,14 @@ public class SettlementAgentModule {
         receivableSettlement.setAgentType(agent.getType());
     }
 
-    private Optional<SettlementAgentInfo> getAgentInfoByEndorsementId(SettlementAgent settlementAgent, String endorsementId) {
+    private Optional<SettlementAgentInfo> getAgentInfoByEndorsementId(SettlementAgentDto settlementAgent, String endorsementId) {
         return Optional.empty();
     }
 
     /**
      * 判断保单是否匹配上对应的结算主体
      */
-    private Optional<SettlementAgentInfo> getAgentInfoByPolicyId(SettlementAgent settlementAgent, String policyId) {
+    private Optional<SettlementAgentInfo> getAgentInfoByPolicyId(SettlementAgentDto settlementAgent, String policyId) {
         PolicyDto policyDto = policyFeign.findPolicyByPolicyId(policyId);
         // 拿到承保时间
         Long insureAt = policyDto.getInsureAt();
