@@ -2,7 +2,6 @@
   <configuration default="false" name="PolicyApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
     <module name="service_policy" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.PolicyApplication" />
-    <option name="VM_PARAMETERS" value="-javaagent:$USER_HOME$/Downloads/apache-skywalking-java-agent-9.0.0/skywalking-agent/skywalking-agent.jar -Dskywalking.agent.service_name=policy -Dskywalking.collector.backend_service=127.0.0.1:11800" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

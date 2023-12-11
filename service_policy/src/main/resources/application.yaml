@@ -7,7 +7,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://127.0.0.1:3306/policy
+    url: jdbc:mysql://120.78.91.241:3306/policy
   rabbitmq:
     password: guest
     username: guest
