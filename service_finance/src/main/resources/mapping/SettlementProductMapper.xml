@@ -7,14 +7,29 @@
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
         <result column="org_id" property="orgId"/>
+        <result column="bill_id" property="billId"/>
         <collection property="settlementAgents"
                     ofType="org.example.entity.settlement_product.ProductSettlementAgent">
             <result column="agent_id" property="id"/>
             <result column="name" property="name"/>
             <result column="type" property="type"/>
+<!--            <result column="product_id" property="productId"/>-->
+<!--            <result column="agent_id" property="agentId"/>-->
             <result column="rate" property="rate"/>
         </collection>
     </resultMap>
+    <insert id="insertAgents">
+        insert into product_to_agent
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+             #{item.id},
+             #{item.productId},
+             #{item.agentId},
+             #{item.rate}
+            )
+        </foreach>
+    </insert>
 
     <select id="findAllByInsuranceId" resultMap="settlementProduct">
         select
@@ -27,7 +42,25 @@
         left join finance.product_to_agent temp
         on p.id = temp.product_id
         left join finance.settlement_agent a
-        on temp.id = a.id
-        where insurance_id = #{insuranceId}
+        on temp.agent_id = a.id
+        where p.insurance_id = #{insuranceId}
+    </select>
+    <select id="findList" resultMap="settlementProduct">
+        select
+            p.id,
+            p.created_at,
+            p.updated_at,
+            p.insurance_id,
+            p.bill_id,
+            p.org_id,
+            a.id as agent_id,
+            a.name,
+            a.type,
+            temp.rate as rate
+        from
+            settlement_product p
+        left join product_to_agent temp on p.id = temp.product_id
+        left join settlement_agent a on a.id = temp.agent_id
+        limit #{pageSize} offset #{page}
     </select>
 </mapper>

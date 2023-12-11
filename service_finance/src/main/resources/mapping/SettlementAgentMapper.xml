@@ -3,35 +3,65 @@
 <mapper namespace="org.example.mapper.SettlementAgentMapper">
     <resultMap id="settlementAgent" type="org.example.dto.SettlementAgentDto">
         <result column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="org_id" property="orgId"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
         <result column="org_id" property="orgId"/>
         <collection property="info"
                     ofType="org.example.entity.settlement_agent.SettlementAgentInfo">
-            <result column="agent_id" property="id"/>
+            <result column="info_id" property="id"/>
+            <result column="agent_id" property="agentId"/>
             <result column="fee_rate" property="feeRate"/>
             <result column="tax_rate" property="taxRate"/>
             <result column="is_include_tax" property="isIncludeTax"/>
             <result column="from" property="from"/>
             <result column="end" property="end"/>
             <result column="bill_id" property="billId"/>
-            <result column="created_at" property="createdAt"/>
-            <result column="updated_at" property="updatedAt"/>
+            <result column="info_created_at" property="createdAt"/>
+            <result column="info_updated_at" property="updatedAt"/>
         </collection>
     </resultMap>
 
-    <select id="selectByIdList" resultMap="settlementAgent">
+<!--    <select id="selectByIdList" resultMap="settlementAgent">-->
+<!--        select-->
+<!--        p.*,-->
+<!--        a.id as agent_id,-->
+<!--        a.name,-->
+<!--        a.type,-->
+<!--        temp.rate as rate-->
+<!--        from finance.settlement_product p-->
+<!--        left join finance.product_to_agent temp-->
+<!--        on p.id = temp.product_id-->
+<!--        left join finance.settlement_agent a-->
+<!--        on temp.id = a.id-->
+<!--        where insurance_id = #{insuranceId}-->
+<!--    </select>-->
+    <select id="findList" resultMap="settlementAgent">
         select
-        p.*,
-        a.id as agent_id,
-        a.name,
-        a.type,
-        temp.rate as rate
-        from finance.settlement_product p
-        left join finance.product_to_agent temp
-        on p.id = temp.product_id
-        left join finance.settlement_agent a
-        on temp.id = a.id
-        where insurance_id = #{insuranceId}
+            agent.id as id,
+            agent.name as name,
+            agent.type as type,
+            agent.org_id as org_id,
+            agent.created_at as created_at,
+            agent.updated_at as updated_at,
+            info.id as info_id,
+            info.agent_id,
+            info.created_at as info_created_at,
+            info.updated_at as info_updated_at,
+            info.fee_rate,
+            info.tax_rate,
+            info.is_include_tax,
+            info.`from`,
+            info.end,
+            info.bill_id
+        from settlement_agent agent
+        left join settlement_agent_info info
+        on agent.id = info.agent_id
+        where 1 = 1
+        <if test="name != null and name != ''"> and agent.name = #{name}</if>
+        <if test="agentIdList != null">
+          and agent.id in (<foreach collection="agentIdList" separator="," item="item"> #{item}</foreach>)
+        </if>
     </select>
 </mapper>

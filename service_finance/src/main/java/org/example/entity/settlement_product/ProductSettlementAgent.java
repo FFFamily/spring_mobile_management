@@ -9,5 +9,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ProductSettlementAgent extends SettlementAgent {
+    private String productId;
+    private String agentId;
     private BigDecimal rate;
 }

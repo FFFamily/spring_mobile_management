@@ -14,6 +14,7 @@ import org.example.enums.policy.PolicyTypeEnum;
 import org.example.feign.PolicyFeign;
 import org.example.mapper.BillMapper;
 import org.example.mapper.SettlementAgentMapper;
+import org.example.vo.SettlementAgentListRequest;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -45,7 +46,9 @@ public class SettlementAgentModule {
      * 根据结算主体id查询结算主体
      */
     public List<SettlementAgentDto> getAgentsById(List<String> ids) {
-        return settlementAgentMapper.selectByIdList(ids);
+        SettlementAgentListRequest request = new SettlementAgentListRequest();
+        request.setAgentIdList(ids);
+        return settlementAgentMapper.findList(request);
     }
 
     /**

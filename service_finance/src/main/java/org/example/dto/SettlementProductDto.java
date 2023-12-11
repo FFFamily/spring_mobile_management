@@ -15,7 +15,7 @@ public class SettlementProductDto extends CommonEntity {
     // 开票项目Id
     private String billId;
     // 结算主体
-    private List<ProductSettlementAgent> settlementAgents;
+        private List<ProductSettlementAgent> settlementAgents;
     // 机构
     private String orgId;
 }

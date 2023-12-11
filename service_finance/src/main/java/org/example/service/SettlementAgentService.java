@@ -7,6 +7,7 @@ import org.example.entity.settlement_agent.SettlementAgent;
 import org.example.entity.settlement_agent.SettlementAgentInfo;
 import org.example.mapper.SettlementAgentInfoMapper;
 import org.example.mapper.SettlementAgentMapper;
+import org.example.vo.SettlementAgentListRequest;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +35,14 @@ public class SettlementAgentService {
         newAgent.setType(settlementAgent.getType());
         settlementAgentMapper.insert(newAgent);
         List<SettlementAgentInfo> info = settlementAgent.getInfo();
+        info.forEach(item -> item.setAgentId(newAgent.getId()));
         settlementAgentInfoMapper.insertList(info);
+    }
+
+    /**
+     * 列表查询
+     */
+    public List<SettlementAgentDto> list(SettlementAgentListRequest request) {
+        return settlementAgentMapper.findList(request);
     }
 }
