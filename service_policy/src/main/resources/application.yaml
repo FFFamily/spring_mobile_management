@@ -17,6 +17,7 @@ spring:
     nacos:
       discovery:
         server-addr: 120.78.91.241:8848
+        service: ${spring.application.name}
 
 mybatis-plus:
   configuration:

@@ -6,7 +6,6 @@ import org.example.core.policy.PolicyDto;
 import org.example.dto.SettlementAgentDto;
 import org.example.entity.Bill;
 import org.example.entity.CommonException;
-import org.example.entity.settlement_agent.SettlementAgent;
 import org.example.entity.receivable_settlement.ReceivableSettlement;
 import org.example.entity.settlement_agent.SettlementAgentInfo;
 import org.example.enums.SettlementAgentTypeEnum;
@@ -75,7 +74,7 @@ public class SettlementAgentModule {
         Long insuredAt = receivableSettlement.getInsuredAt();
         if (insuredAt != null) {
             optional = getAgentCurrentSettlementInfo(agent, receivableSettlement.getInsuredAt());
-        }else {
+        } else {
             if (receivableSettlement.getPolicyType().equals(PolicyTypeEnum.POLICY.getCode())) {
                 optional = getAgentInfoByPolicyId(agent, receivableSettlement.getPolicyId());
             } else {
@@ -114,7 +113,8 @@ public class SettlementAgentModule {
      * 判断保单是否匹配上对应的结算主体
      */
     private Optional<SettlementAgentInfo> getAgentInfoByPolicyId(SettlementAgentDto settlementAgent, String policyId) {
-        PolicyDto policyDto = policyFeign.findPolicyByPolicyId(policyId);
+        PolicyDto policyDto = policyFeign.findPolicyByPolicyId(policyId).getData();
+        log.info("远程查询 {} 保单信息: {}", policyId, policyDto);
         // 拿到承保时间
         Long insureAt = policyDto.getInsureAt();
         return getAgentCurrentSettlementInfo(settlementAgent, insureAt);
