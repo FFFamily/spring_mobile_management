@@ -17,6 +17,7 @@
         <module>common_log</module>
         <module>common_message</module>
         <module>core</module>
+        <module>service_demand</module>
     </modules>
 
     <packaging>pom</packaging>
